@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Interactive Site</title>
+<style>
+body{
+    font-family: Arial;
+    text-align: center;
+    background-color: white;
+    color: black;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0;
+    padding: 0;
+}
+
+#top{
+    color: blue;
+    margin-top: 20px;
+}
+
+/* Kitchen button (TOP LEFT) */
+#kitchenBtn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: orange;
+    color: white;
+}
+
+#kitchenBtn:hover {
+    background-color: darkorange;
+}
+
+#middle{
+    margin-top: 150px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+button{
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.main-btn {
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+.main-btn:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+#darkModeBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #555;
+    color: white;
+}
+
+#darkModeBtn:hover {
+    background-color: #333;
+}
+
+.dark-mode {
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+}
+
+.dark-mode button {
+    background-color: #777;
+    color: white;
+}
+
+.dark-mode button:hover {
+    background-color: #555;
+}
+
+input{
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+.dark-mode input{
+    background-color: #333;
+    color: #f5f5f5;
+    border: 1px solid #555;
+}
+</style>
+</head>
+<body>
+
+<h1 id="top">Hello World</h1>
+
+<!-- ✅ Kitchen Button -->
+<button id="kitchenBtn" onclick="goKitchen()">Kitchen</button>
+
+<div id="middle">
+    <button class="main-btn" onclick="showSignup()">Sign Up</button>
+    <button class="main-btn" onclick="showLogin()">Log In</button>
+</div>
+
+<p id="message"></p>
+
+<button id="darkModeBtn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+<script>
+function goKitchen(){
+    window.location.href = "kitchen.html";
+}
+
+function showSignup(){
+    document.getElementById("middle").innerHTML = `
+        <div>
+            <p>Username:</p>
+            <input id="suUser"><br><br>
+            <p>Password:</p>
+            <input id="suPass" type="password"><br><br>
+            <button onclick="createAccount()">Create Account</button>
+            <button onclick="resetButtons()">Back</button>
+        </div>
+    `;
+}
+
+function showLogin(){
+    document.getElementById("middle").innerHTML = `
+        <div>
+            <p>Username:</p>
+            <input id="liUser"><br><br>
+            <p>Password:</p>
+            <input id="liPass" type="password"><br><br>
+            <button onclick="login()">Log In</button>
+            <button onclick="resetButtons()">Back</button>
+        </div>
+    `;
+}
+
+function createAccount(){
+    const user = document.getElementById("suUser").value;
+    const pass = document.getElementById("suPass").value;
+
+    if(!user || !pass){
+        document.getElementById("message").innerText = "Please fill all fields!";
+        return;
+    }
+
+    localStorage.setItem("username", user);
+    localStorage.setItem("password", pass);
+
+    document.getElementById("message").innerText = "You've made an account!";
+    resetButtons();
+}
+
+function login(){
+    const user = document.getElementById("liUser").value;
+    const pass = document.getElementById("liPass").value;
+
+    if(!user || !pass){
+        document.getElementById("message").innerText = "Please fill all fields!";
+        return;
+    }
+
+    const savedUser = localStorage.getItem("username");
+    const savedPass = localStorage.getItem("password");
+
+    if(user === savedUser && pass === savedPass){
+        document.getElementById("message").innerText = "Hello " + user;
+    } else {
+        document.getElementById("message").innerText = "Wrong username or password";
+    }
+
+    resetButtons();
+}
+
+function resetButtons(){
+    document.getElementById("middle").innerHTML = `
+        <button class="main-btn" onclick="showSignup()">Sign Up</button>
+        <button class="main-btn" onclick="showLogin()">Log In</button>
+    `;
+}
+
+function toggleDarkMode() {
+    const body = document.body;
+    const btn = document.getElementById("darkModeBtn");
+
+    body.classList.toggle("dark-mode");
+
+    const isDark = body.classList.contains("dark-mode");
+    localStorage.setItem("darkMode", isDark);
+
+    btn.innerText = isDark ? "Toggle Light Mode" : "Toggle Dark Mode";
+}
+
+window.onload = function(){
+    const isDark = localStorage.getItem("darkMode") === "true";
+    const btn = document.getElementById("darkModeBtn");
+
+    if(isDark){
+        document.body.classList.add("dark-mode");
+        btn.innerText = "Toggle Light Mode";
+    }
+}
+</script>
+
+</body>
+</html>

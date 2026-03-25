@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Kitchen Recipes</title>
+<style>
+body{
+    font-family: Arial;
+    text-align: center;
+    background-color: #fff8e1;
+    margin: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark mode */
+.dark-mode {
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+}
+
+/* Back button */
+#backBtn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#backBtn:hover { background-color: #333; }
+
+/* Dark mode button */
+#darkModeBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #555;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#darkModeBtn:hover { background-color: #333; }
+
+/* Recipe buttons */
+#menu {
+    margin-top: 30px;
+}
+
+.recipeBtn {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: tomato;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.recipeBtn:hover { background-color: darkred; }
+
+/* Recipe box */
+#recipeBox {
+    margin-top: 30px;
+    padding: 20px;
+}
+
+/* Ingredient checklist styling */
+ul li {
+    cursor: pointer;
+    user-select: none;
+}
+ul li.checked {
+    text-decoration: line-through;
+    color: gray;
+}
+
+/* Step-by-step styling */
+ol li {
+    cursor: pointer;
+    user-select: none;
+}
+ol li.completed {
+    color: green;
+    text-decoration: line-through;
+}
+
+/* Fun fact text */
+#funFact {
+    margin-top: 20px;
+    font-style: italic;
+    color: #555;
+}
+.dark-mode #funFact {
+    color: #ddd;
+}
+
+/* Slider for oven temp */
+#ovenTemp {
+    width: 200px;
+}
+</style>
+</head>
+<body>
+
+<button id="backBtn" onclick="goBack()">Back</button>
+<button id="darkModeBtn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+<h1>🍳 Kitchen Recipes</h1>
+
+<p id="welcome"></p>
+
+<p>Choose a spaghetti recipe:</p>
+<div id="menu">
+    <button class="recipeBtn" onclick="showRecipe('bolognese')">Spaghetti Bolognese</button>
+    <button class="recipeBtn" onclick="showRecipe('carbonara')">Spaghetti Carbonara</button>
+    <button class="recipeBtn" onclick="showRecipe('pesto')">Spaghetti Pesto</button>
+</div>
+
+<div id="recipeBox">
+    <p>Select a recipe to see details 👆</p>
+</div>
+
+<p id="funFact"></p>
+
+<script>
+/* Logged-in user greeting */
+let user = localStorage.getItem("username");
+if(user){
+    document.getElementById("welcome").innerText = "Welcome, " + user + " 👨‍🍳";
+}
+
+/* Back button */
+function goBack(){
+    window.location.href = "index.html";
+}
+
+/* Dark mode toggle */
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("kitchenDarkMode", document.body.classList.contains("dark-mode"));
+}
+
+/* Fun facts */
+const funFacts = [
+    "Spaghetti was first made in Italy over 500 years ago! 🍝",
+    "Boiling water at high altitude takes longer to cook pasta. ⏱️",
+    "Parmesan cheese is aged for 12–36 months for full flavor. 🧀",
+    "Carbonara originally didn’t have cream — just eggs and cheese. 😲",
+    "Basil is an insect-repelling herb — it keeps mosquitoes away! 🌿",
+    "Tomatoes are actually fruits, not vegetables! 🍅",
+    "Over 60 billion pounds of pasta are eaten worldwide each year! 🌎"
+];
+
+function showFunFact(){
+    const fact = funFacts[Math.floor(Math.random() * funFacts.length)];
+    document.getElementById("funFact").innerText = "💡 Fun Fact: " + fact;
+}
+
+/* Recipe display with step-by-step + temperature */
+function showRecipe(type){
+    let content = "";
+    let temp = 180; // default
+
+    if(type === "bolognese"){
+        temp = 180;
+        content = `
+        <h2>🍝 Spaghetti Bolognese</h2>
+        <p><b>⏱️ Time:</b> 45 minutes <button onclick="startTimer(45)">Start Timer</button> <span id="timer">0</span></p>
+        <p><b>🔥 Recommended Temperature:</b> <span id="tempDisplay">${temp}°C</span></p>
+        <p>Adjust your oven temperature: 
+            <input type="range" min="100" max="220" value="${temp}" id="ovenTemp"> 
+            <span id="ovenValue">${temp}°C</span>
+        </p>
+        <p id="tempFeedback"></p>
+
+        <h3>🧂 Ingredients:</h3>
+        <ul>
+            <li onclick="toggleCheck(this)">Spaghetti</li>
+            <li onclick="toggleCheck(this)">Minced meat</li>
+            <li onclick="toggleCheck(this)">Tomato sauce</li>
+            <li onclick="toggleCheck(this)">Onion & garlic</li>
+            <li onclick="toggleCheck(this)">Olive oil</li>
+            <li onclick="toggleCheck(this)">Salt & pepper</li>
+        </ul>
+
+        <h3>👨‍🍳 Steps (click each step when done):</h3>
+        <ol>
+            <li onclick="completeStep(this)">Boil spaghetti</li>
+            <li onclick="completeStep(this)">Cook onion and garlic</li>
+            <li onclick="completeStep(this)">Add meat and cook</li>
+            <li onclick="completeStep(this)">Add tomato sauce</li>
+            <li onclick="completeStep(this)">Mix with spaghetti</li>
+        </ol>
+        `;
+    }
+
+    if(type === "carbonara"){
+        temp = 160;
+        content = `
+        <h2>🍝 Spaghetti Carbonara</h2>
+        <p><b>⏱️ Time:</b> 25 minutes <button onclick="startTimer(25)">Start Timer</button> <span id="timer">0</span></p>
+        <p><b>🔥 Recommended Temperature:</b> <span id="tempDisplay">${temp}°C</span></p>
+        <p>Adjust your oven temperature: 
+            <input type="range" min="100" max="220" value="${temp}" id="ovenTemp"> 
+            <span id="ovenValue">${temp}°C</span>
+        </p>
+        <p id="tempFeedback"></p>
+
+        <h3>🧂 Ingredients:</h3>
+        <ul>
+            <li onclick="toggleCheck(this)">Spaghetti</li>
+            <li onclick="toggleCheck(this)">Eggs</li>
+            <li onclick="toggleCheck(this)">Bacon</li>
+            <li onclick="toggleCheck(this)">Parmesan cheese</li>
+            <li onclick="toggleCheck(this)">Black pepper</li>
+        </ul>
+
+        <h3>👨‍🍳 Steps (click each step when done):</h3>
+        <ol>
+            <li onclick="completeStep(this)">Boil spaghetti</li>
+            <li onclick="completeStep(this)">Cook bacon</li>
+            <li onclick="completeStep(this)">Mix eggs and cheese</li>
+            <li onclick="completeStep(this)">Combine everything</li>
+        </ol>
+        `;
+    }
+
+    if(type === "pesto"){
+        temp = 150;
+        content = `
+        <h2>🍝 Spaghetti Pesto</h2>
+        <p><b>⏱️ Time:</b> 20 minutes <button onclick="startTimer(20)">Start Timer</button> <span id="timer">0</span></p>
+        <p><b>🔥 Recommended Temperature:</b> <span id="tempDisplay">${temp}°C</span></p>
+        <p>Adjust your oven temperature: 
+            <input type="range" min="100" max="220" value="${temp}" id="ovenTemp"> 
+            <span id="ovenValue">${temp}°C</span>
+        </p>
+        <p id="tempFeedback"></p>
+
+        <h3>🧂 Ingredients:</h3>
+        <ul>
+            <li onclick="toggleCheck(this)">Spaghetti</li>
+            <li onclick="toggleCheck(this)">Basil pesto</li>
+            <li onclick="toggleCheck(this)">Olive oil</li>
+            <li onclick="toggleCheck(this)">Parmesan cheese</li>
+        </ul>
+
+        <h3>👨‍🍳 Steps (click each step when done):</h3>
+        <ol>
+            <li onclick="completeStep(this)">Boil spaghetti</li>
+            <li onclick="completeStep(this)">Add pesto</li>
+            <li onclick="completeStep(this)">Mix well</li>
+            <li onclick="completeStep(this)">Serve with cheese</li>
+        </ol>
+        `;
+    }
+
+    document.getElementById("recipeBox").innerHTML = content;
+
+    // Attach slider functionality and feedback
+    const slider = document.getElementById("ovenTemp");
+    const output = document.getElementById("ovenValue");
+    const feedback = document.getElementById("tempFeedback");
+    const recommendedTemp = temp;
+
+    slider.addEventListener("input", function(){
+        const val = parseInt(this.value);
+        output.innerText = val + "°C";
+
+        if(val < recommendedTemp - 10){
+            feedback.innerText = "❄️ Too cold! The pasta will take longer to cook.";
+            feedback.style.color = "blue";
+        } else if(val > recommendedTemp + 10){
+            feedback.innerText = "🔥 Too hot! The sauce might burn.";
+            feedback.style.color = "red";
+        } else {
+            feedback.innerText = "✅ Perfect temperature!";
+            feedback.style.color = "green";
+        }
+    });
+
+    // Show a fun fact
+    showFunFact();
+}
+
+/* Ingredient checklist */
+function toggleCheck(li){
+    li.classList.toggle("checked");
+}
+
+/* Step-by-step completion */
+function completeStep(li){
+    li.classList.add("completed");
+    let next = li.nextElementSibling;
+    if(next) next.style.pointerEvents = "auto";
+}
+
+/* Timer function */
+function startTimer(minutes){
+    let time = minutes * 60;
+    let timerDisplay = document.getElementById("timer");
+    if(!timerDisplay) return;
+
+    clearInterval(window.timerInterval);
+
+    window.timerInterval = setInterval(() => {
+        let mins = Math.floor(time / 60);
+        let secs = time % 60;
+        timerDisplay.innerText = mins + "m " + secs + "s";
+        time--;
+        if(time < 0){
+            clearInterval(window.timerInterval);
+            alert("⏰ Time's up! Your recipe is ready!");
+            timerDisplay.innerText = "Done!";
+        }
+    }, 1000);
+}
+</script>
+
+</body>
+</html>
