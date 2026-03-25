@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>My Interactive Site</title>
+<title>Home Kitchen Hub</title>
+
 <style>
 body{
     font-family: Arial;
     text-align: center;
-    background-color: white;
+    background-color: #fff8f0;
     color: black;
     transition: background-color 0.3s, color 0.3s;
     margin: 0;
@@ -14,8 +15,8 @@ body{
 }
 
 #top{
-    color: blue;
-    margin-top: 20px;
+    color: #d35400;
+    margin-top: 40px;
 }
 
 /* Kitchen button (TOP LEFT) */
@@ -27,18 +28,24 @@ body{
     color: white;
 }
 
-#kitchenBtn:hover {
-    background-color: darkorange;
+/* Login buttons (TOP RIGHT) */
+#authButtons {
+    position: fixed;
+    top: 20px;
+    right: 20px;
 }
 
+#authButtons button {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+/* Main section */
 #middle{
-    margin-top: 150px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    margin-top: 120px;
 }
 
+/* Buttons */
 button{
     padding: 10px 20px;
     margin: 10px;
@@ -49,16 +56,18 @@ button{
 }
 
 .main-btn {
-    padding: 15px 30px;
-    font-size: 16px;
+    padding: 12px 25px;
+    font-size: 15px;
     border-radius: 8px;
-}
-
-.main-btn:hover {
-    background-color: #007BFF;
+    background-color: #e67e22;
     color: white;
 }
 
+.main-btn:hover {
+    background-color: #d35400;
+}
+
+/* Dark mode button */
 #darkModeBtn {
     position: fixed;
     bottom: 20px;
@@ -67,10 +76,7 @@ button{
     color: white;
 }
 
-#darkModeBtn:hover {
-    background-color: #333;
-}
-
+/* Dark mode styles */
 .dark-mode {
     background-color: #1e1e1e;
     color: #f5f5f5;
@@ -85,6 +91,11 @@ button{
     background-color: #555;
 }
 
+.dark-mode #top {
+    color: #ffa94d;
+}
+
+/* Inputs */
 input{
     padding: 5px;
     margin: 5px;
@@ -99,16 +110,36 @@ input{
 }
 </style>
 </head>
+
 <body>
 
-<h1 id="top">Hello World</h1>
-
-<!-- ✅ Kitchen Button -->
+<!-- Kitchen button -->
 <button id="kitchenBtn" onclick="goKitchen()">Kitchen</button>
 
+<!-- Login / Signup (TOP RIGHT) -->
+<div id="authButtons">
+    <button onclick="showLogin()">Log In</button>
+    <button onclick="showSignup()">Sign Up</button>
+</div>
+
+<h1 id="top">🍴 Home Kitchen Hub</h1>
+<p>Simple and delicious recipes you can make at home.</p>
+
 <div id="middle">
-    <button class="main-btn" onclick="showSignup()">Sign Up</button>
-    <button class="main-btn" onclick="showLogin()">Log In</button>
+
+    <h2>🔥 Featured Recipes</h2>
+    <ul style="list-style: none; padding: 0;">
+        <li>Pasta</li>
+        <li>Chicken Rice</li>
+        <li>Chocolate Cake</li>
+    </ul>
+
+    <br>
+
+    <a href="kitchen.html">
+        <button class="main-btn">View All Recipes</button>
+    </a>
+
 </div>
 
 <p id="message"></p>
@@ -123,12 +154,13 @@ function goKitchen(){
 function showSignup(){
     document.getElementById("middle").innerHTML = `
         <div>
+            <h2>Create Account</h2>
             <p>Username:</p>
             <input id="suUser"><br><br>
             <p>Password:</p>
             <input id="suPass" type="password"><br><br>
-            <button onclick="createAccount()">Create Account</button>
-            <button onclick="resetButtons()">Back</button>
+            <button onclick="createAccount()">Create</button>
+            <button onclick="resetHome()">Back</button>
         </div>
     `;
 }
@@ -136,12 +168,13 @@ function showSignup(){
 function showLogin(){
     document.getElementById("middle").innerHTML = `
         <div>
+            <h2>Log In</h2>
             <p>Username:</p>
             <input id="liUser"><br><br>
             <p>Password:</p>
             <input id="liPass" type="password"><br><br>
             <button onclick="login()">Log In</button>
-            <button onclick="resetButtons()">Back</button>
+            <button onclick="resetHome()">Back</button>
         </div>
     `;
 }
@@ -158,35 +191,38 @@ function createAccount(){
     localStorage.setItem("username", user);
     localStorage.setItem("password", pass);
 
-    document.getElementById("message").innerText = "You've made an account!";
-    resetButtons();
+    document.getElementById("message").innerText = "Account created!";
+    resetHome();
 }
 
 function login(){
     const user = document.getElementById("liUser").value;
     const pass = document.getElementById("liPass").value;
 
-    if(!user || !pass){
-        document.getElementById("message").innerText = "Please fill all fields!";
-        return;
-    }
-
     const savedUser = localStorage.getItem("username");
     const savedPass = localStorage.getItem("password");
 
     if(user === savedUser && pass === savedPass){
-        document.getElementById("message").innerText = "Hello " + user;
+        document.getElementById("message").innerText = "Welcome " + user + "!";
     } else {
         document.getElementById("message").innerText = "Wrong username or password";
     }
 
-    resetButtons();
+    resetHome();
 }
 
-function resetButtons(){
+function resetHome(){
     document.getElementById("middle").innerHTML = `
-        <button class="main-btn" onclick="showSignup()">Sign Up</button>
-        <button class="main-btn" onclick="showLogin()">Log In</button>
+        <h2>🔥 Featured Recipes</h2>
+        <ul style="list-style: none; padding: 0;">
+            <li>Pasta</li>
+            <li>Chicken Rice</li>
+            <li>Chocolate Cake</li>
+        </ul>
+        <br>
+        <a href="kitchen.html">
+            <button class="main-btn">View All Recipes</button>
+        </a>
     `;
 }
 
@@ -199,7 +235,7 @@ function toggleDarkMode() {
     const isDark = body.classList.contains("dark-mode");
     localStorage.setItem("darkMode", isDark);
 
-    btn.innerText = isDark ? "Toggle Light Mode" : "Toggle Dark Mode";
+    btn.innerText = isDark ? "Light Mode" : "Dark Mode";
 }
 
 window.onload = function(){
@@ -208,7 +244,7 @@ window.onload = function(){
 
     if(isDark){
         document.body.classList.add("dark-mode");
-        btn.innerText = "Toggle Light Mode";
+        btn.innerText = "Light Mode";
     }
 }
 </script>
