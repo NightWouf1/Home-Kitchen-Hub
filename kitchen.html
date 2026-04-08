@@ -6,143 +6,179 @@
 <title>Kitchen Recipes – Kitchen Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#fdf6ee; --bg2:#fff8f0; --text:#1a1208; --text2:#5a4a3a;
-    --accent:#c8440a; --accent2:#e07b39;
-    --card:#ffffff; --border:#e8d8c4; --shadow:rgba(180,100,40,0.12);
-  }
-  .dark {
-    --bg:#16100a; --bg2:#1e160e; --text:#f5ede0; --text2:#b09070;
-    --accent:#e8673a; --accent2:#f09050;
-    --card:#221a10; --border:#3a2a1a; --shadow:rgba(0,0,0,0.4);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); transition:background 0.3s,color 0.3s; min-height:100vh; }
-  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:64px; background:var(--bg); border-bottom:1px solid var(--border); }
-  .nav-logo { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; color:var(--accent); text-decoration:none; }
-  .nav-links { display:flex; gap:8px; align-items:center; }
-  .nav-links a { text-decoration:none; color:var(--text2); font-size:0.9rem; padding:6px 14px; border-radius:20px; transition:background 0.2s,color 0.2s; }
-  .nav-links a:hover { background:var(--border); color:var(--text); }
-  .nav-links a.active { background:var(--accent); color:white; }
-  .nav-right { display:flex; gap:8px; align-items:center; }
-  #darkBtn { background:var(--border); color:var(--text); border:none; border-radius:20px; padding:6px 14px; cursor:pointer; font-size:0.85rem; font-family:'DM Sans',sans-serif; transition:background 0.2s; }
-  #darkBtn:hover { background:var(--accent); color:white; }
-  #userChip { display:none; align-items:center; gap:8px; background:var(--bg2); border:1px solid var(--border); border-radius:20px; padding:4px 14px 4px 8px; font-size:0.85rem; }
-  #userChip .avatar { width:26px; height:26px; border-radius:50%; background:var(--accent); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; }
-  #logoutBtn { background:none; border:none; color:var(--text2); cursor:pointer; font-size:0.75rem; margin-left:4px; }
-  .page { padding:88px 32px 64px; max-width:1200px; margin:0 auto; }
-  .toolbar { display:flex; gap:12px; align-items:center; margin-bottom:28px; flex-wrap:wrap; }
-  .search-wrap { position:relative; flex:1; min-width:200px; }
-  .search-wrap input { width:100%; padding:10px 16px 10px 40px; border:1px solid var(--border); border-radius:12px; background:var(--card); color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem; }
-  .search-wrap input:focus { outline:none; border-color:var(--accent); }
-  .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text2); pointer-events:none; }
-  .filter-group { display:flex; gap:8px; flex-wrap:wrap; }
-  .filter-btn { padding:8px 16px; border-radius:20px; border:1px solid var(--border); background:var(--card); color:var(--text2); cursor:pointer; font-size:0.8rem; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
-  .filter-btn:hover, .filter-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
-  .page-header { margin-bottom:32px; }
-  .page-header h1 { font-family:'Playfair Display',serif; font-size:2.2rem; margin-bottom:8px; }
-  .page-header p { color:var(--text2); }
-  .recipe-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
-  .recipe-card { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; transition:transform 0.2s,box-shadow 0.2s; cursor:pointer; }
-  .recipe-card:hover { transform:translateY(-4px); box-shadow:0 12px 40px var(--shadow); }
-  .card-emoji { font-size:3rem; background:var(--bg2); display:block; text-align:center; padding:24px 0; position:relative; }
-  .fav-btn { position:absolute; top:10px; right:12px; background:var(--card); border:1px solid var(--border); border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1rem; transition:all 0.2s; }
-  .fav-btn:hover { background:var(--accent); border-color:var(--accent); }
-  .fav-btn.active { background:#ffe0e0; border-color:#e04040; }
-  .dark .fav-btn.active { background:#3a0808; border-color:#e04040; }
-  .card-body { padding:16px 20px 20px; }
-  .card-tags { display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
-  .tag { font-size:0.7rem; padding:3px 10px; border-radius:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.05em; }
-  .tag-cuisine { background:#fde8d8; color:#c8440a; }
-  .dark .tag-cuisine { background:#3a1a08; color:#e8673a; }
-  .tag-easy { background:#d8f5e8; color:#1a7a40; }
-  .dark .tag-easy { background:#0a2a18; color:#4aaa70; }
-  .tag-medium { background:#fff3d8; color:#a07000; }
-  .dark .tag-medium { background:#2a1e00; color:#d4aa40; }
-  .tag-hard { background:#fde0e0; color:#a02020; }
-  .dark .tag-hard { background:#2a0808; color:#e05050; }
-  .card-title { font-family:'Playfair Display',serif; font-size:1.15rem; margin-bottom:6px; }
-  .card-meta { display:flex; gap:14px; font-size:0.8rem; color:var(--text2); }
-  .detail-panel { display:none; position:fixed; top:64px; right:0; bottom:0; width:420px; background:var(--card); border-left:1px solid var(--border); overflow-y:auto; z-index:90; padding:28px; }
-  .detail-panel.open { display:block; }
-  .detail-close { position:absolute; top:16px; right:16px; background:var(--border); border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; font-size:1rem; color:var(--text); display:flex; align-items:center; justify-content:center; }
-  .detail-emoji { font-size:3.5rem; margin-bottom:12px; display:block; }
-  .detail-title { font-family:'Playfair Display',serif; font-size:1.8rem; margin-bottom:8px; }
-  .detail-meta { display:flex; gap:14px; color:var(--text2); font-size:0.85rem; margin-bottom:16px; flex-wrap:wrap; }
-  .divider { border:none; border-top:1px solid var(--border); margin:20px 0; }
-  .scaler { display:flex; align-items:center; gap:12px; background:var(--bg2); border-radius:12px; padding:12px 16px; margin-bottom:20px; }
-  .scaler label { font-size:0.85rem; font-weight:500; flex:1; }
-  .scaler-btns { display:flex; align-items:center; gap:8px; }
-  .scaler-btn { width:28px; height:28px; border-radius:50%; background:var(--accent); color:white; border:none; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; }
-  #servingNum { font-weight:700; font-size:1rem; min-width:24px; text-align:center; }
-  .section-label { font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:12px; }
-  .ing-list { list-style:none; }
-  .ing-list li { padding:8px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.9rem; }
-  .ing-list li:last-child { border-bottom:none; }
-  .ing-list li.checked { text-decoration:line-through; color:var(--text2); }
-  .ing-check { width:18px; height:18px; border-radius:4px; border:1.5px solid var(--border); flex-shrink:0; transition:all 0.2s; }
-  .ing-list li.checked .ing-check { background:var(--accent); border-color:var(--accent); }
-  .ing-amt { font-weight:500; color:var(--accent); min-width:60px; }
-  .step-list { list-style:none; }
-  .step-item { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid var(--border); cursor:pointer; }
-  .step-item:last-child { border-bottom:none; }
-  .step-item.done { opacity:0.5; }
-  .step-num { width:28px; height:28px; border-radius:50%; background:var(--accent); color:white; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; flex-shrink:0; }
-  .step-item.done .step-num { background:var(--border); }
-  .step-text { font-size:0.9rem; line-height:1.6; }
-  .timer-bar { background:var(--bg2); border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:12px; margin-top:20px; }
-  .timer-bar .timer-display { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--accent); }
-  .timer-bar button { padding:6px 14px; border-radius:10px; border:none; cursor:pointer; font-size:0.8rem; font-family:'DM Sans',sans-serif; font-weight:500; }
-  .rating-widget { margin:20px 0; }
-  .rating-stars { display:flex; gap:4px; margin-bottom:8px; }
-  .star-btn { background:none; border:none; font-size:1.5rem; cursor:pointer; line-height:1; }
-  .star-btn:hover { transform:scale(1.2); }
-  .rating-avg { font-size:0.85rem; color:var(--text2); }
-  .shop-bar { background:var(--bg2); border-radius:12px; padding:14px 16px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; }
-  .shop-bar p { font-size:0.85rem; color:var(--text2); }
-  .shop-btn { padding:7px 14px; background:var(--accent); color:white; border:none; border-radius:8px; cursor:pointer; font-size:0.8rem; font-family:'DM Sans',sans-serif; }
-  .btn { display:inline-flex; align-items:center; padding:8px 18px; border-radius:20px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.875rem; font-weight:500; transition:all 0.2s; }
-  .btn-primary { background:var(--accent); color:white; }
-  .btn-primary:hover { background:var(--accent2); }
-  .btn-ghost { background:transparent; color:var(--text2); border:1px solid var(--border); }
-  .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
-  .modal-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:20px; }
-  .modal-overlay.open { display:flex; }
-  .modal { background:var(--card); border-radius:20px; max-width:560px; width:100%; max-height:90vh; overflow-y:auto; padding:36px; position:relative; }
-  .modal-close { position:absolute; top:16px; right:16px; background:var(--border); border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; font-size:1rem; color:var(--text); display:flex; align-items:center; justify-content:center; }
-  .modal h2 { font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:8px; }
-  .modal p { color:var(--text2); margin-bottom:20px; font-size:0.9rem; }
-  .form-group { margin-bottom:14px; }
-  .form-group label { display:block; font-size:0.85rem; font-weight:500; margin-bottom:6px; color:var(--text2); }
-  .form-group input, .form-group select, .form-group textarea { width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:10px; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem; }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline:none; border-color:var(--accent); }
-  .form-group textarea { resize:vertical; min-height:80px; }
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .msg { font-size:0.85rem; padding:10px 14px; border-radius:10px; margin-top:12px; }
-  .msg-success { background:#d8f5e8; color:#1a7a40; }
-  .msg-error { background:#fde0e0; color:#a02020; }
-  .shop-list { list-style:none; }
-  .shop-list li { padding:8px 0; border-bottom:1px solid var(--border); font-size:0.9rem; display:flex; justify-content:space-between; align-items:center; }
-  .shop-list li:last-child { border-bottom:none; }
-  .shop-list li button { background:none; border:none; color:var(--text2); cursor:pointer; font-size:1rem; }
-  .shop-section-title { font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text2); margin:16px 0 8px; }
-  .empty { text-align:center; padding:80px 20px; color:var(--text2); }
-  .empty-icon { font-size:3rem; margin-bottom:16px; }
-  .tab-bar { display:flex; gap:8px; margin-bottom:24px; }
-  .tab-btn { padding:8px 20px; border-radius:20px; border:1px solid var(--border); background:var(--card); color:var(--text2); cursor:pointer; font-size:0.875rem; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
-  .tab-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
-  footer { text-align:center; padding:32px; border-top:1px solid var(--border); color:var(--text2); font-size:0.85rem; margin-top:40px; }
-  footer a { color:var(--accent); text-decoration:none; }
+  :root{--bg:#fdf6ee;--bg2:#fff8f0;--text:#1a1208;--text2:#5a4a3a;--accent:#c8440a;--accent2:#e07b39;--card:#ffffff;--border:#e8d8c4;--shadow:rgba(180,100,40,0.12);}
+  .dark{--bg:#16100a;--bg2:#1e160e;--text:#f5ede0;--text2:#b09070;--accent:#e8673a;--accent2:#f09050;--card:#221a10;--border:#3a2a1a;--shadow:rgba(0,0,0,0.4);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:background 0.3s,color 0.3s;min-height:100vh;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:var(--bg);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--accent);text-decoration:none;}
+  .nav-links{display:flex;gap:8px;align-items:center;}
+  .nav-links a{text-decoration:none;color:var(--text2);font-size:0.9rem;padding:6px 14px;border-radius:20px;transition:background 0.2s,color 0.2s;}
+  .nav-links a:hover{background:var(--border);color:var(--text);}
+  .nav-links a.active{background:var(--accent);color:white;}
+  .nav-right{display:flex;gap:8px;align-items:center;}
+  #darkBtn{background:var(--border);color:var(--text);border:none;border-radius:20px;padding:6px 14px;cursor:pointer;font-size:0.85rem;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
+  #darkBtn:hover{background:var(--accent);color:white;}
+  #userChip{display:none;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:4px 14px 4px 8px;font-size:0.85rem;}
+  #userChip .avatar{width:26px;height:26px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;}
+  #logoutBtn{background:none;border:none;color:var(--text2);cursor:pointer;font-size:0.75rem;margin-left:4px;}
+  .page{padding:88px 32px 64px;max-width:1200px;margin:0 auto;}
+  .toolbar{display:flex;gap:12px;align-items:center;margin-bottom:28px;flex-wrap:wrap;}
+  .search-wrap{position:relative;flex:1;min-width:200px;}
+  .search-wrap input{width:100%;padding:10px 16px 10px 40px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;}
+  .search-wrap input:focus{outline:none;border-color:var(--accent);}
+  .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text2);pointer-events:none;}
+  .filter-group{display:flex;gap:8px;flex-wrap:wrap;}
+  .filter-btn{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;font-size:0.8rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+  .filter-btn:hover,.filter-btn.active{background:var(--accent);color:white;border-color:var(--accent);}
+  .page-header{margin-bottom:32px;}
+  .page-header h1{font-family:'Playfair Display',serif;font-size:2.2rem;margin-bottom:8px;}
+  .page-header p{color:var(--text2);}
+  .recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+  .recipe-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;}
+  .recipe-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px var(--shadow);}
+  .card-emoji{font-size:3rem;background:var(--bg2);display:block;text-align:center;padding:24px 0;position:relative;}
+  .fav-btn{position:absolute;top:10px;right:12px;background:var(--card);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all 0.2s;}
+  .fav-btn.active{background:#ffe0e0;border-color:#e04040;}
+  .dark .fav-btn.active{background:#3a0808;border-color:#e04040;}
+  .card-body{padding:16px 20px 20px;}
+  .card-tags{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+  .tag{font-size:0.7rem;padding:3px 10px;border-radius:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;}
+  .tag-cuisine{background:#fde8d8;color:#c8440a;}
+  .dark .tag-cuisine{background:#3a1a08;color:#e8673a;}
+  .tag-easy{background:#d8f5e8;color:#1a7a40;}
+  .dark .tag-easy{background:#0a2a18;color:#4aaa70;}
+  .tag-medium{background:#fff3d8;color:#a07000;}
+  .dark .tag-medium{background:#2a1e00;color:#d4aa40;}
+  .tag-hard{background:#fde0e0;color:#a02020;}
+  .dark .tag-hard{background:#2a0808;color:#e05050;}
+  .card-title{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:6px;}
+  .card-meta{display:flex;gap:14px;font-size:0.8rem;color:var(--text2);flex-wrap:wrap;}
+  /* DETAIL PANEL */
+  .detail-panel{display:none;position:fixed;top:64px;right:0;bottom:0;width:440px;background:var(--card);border-left:1px solid var(--border);overflow-y:auto;z-index:90;padding:28px;}
+  .detail-panel.open{display:block;}
+  .detail-close{position:absolute;top:16px;right:16px;background:var(--border);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:var(--text);display:flex;align-items:center;justify-content:center;}
+  .detail-emoji{font-size:3.5rem;margin-bottom:12px;display:block;}
+  .detail-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:8px;}
+  .detail-meta{display:flex;gap:14px;color:var(--text2);font-size:0.85rem;margin-bottom:16px;flex-wrap:wrap;}
+  .divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
+  .scaler{display:flex;align-items:center;gap:12px;background:var(--bg2);border-radius:12px;padding:12px 16px;margin-bottom:20px;}
+  .scaler label{font-size:0.85rem;font-weight:500;flex:1;}
+  .scaler-btns{display:flex;align-items:center;gap:8px;}
+  .scaler-btn{width:28px;height:28px;border-radius:50%;background:var(--accent);color:white;border:none;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;}
+  #servingNum{font-weight:700;font-size:1rem;min-width:24px;text-align:center;}
+  .section-label{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:12px;}
+  .ing-list{list-style:none;}
+  .ing-list li{padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.9rem;}
+  .ing-list li:last-child{border-bottom:none;}
+  .ing-list li.checked{text-decoration:line-through;color:var(--text2);}
+  .ing-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0;}
+  .ing-list li.checked .ing-check{background:var(--accent);border-color:var(--accent);}
+  .ing-amt{font-weight:500;color:var(--accent);min-width:60px;}
+  .step-list{list-style:none;}
+  .step-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+  .step-item:last-child{border-bottom:none;}
+  .step-item.done{opacity:0.5;}
+  .step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0;}
+  .step-item.done .step-num{background:var(--border);}
+  .step-text{font-size:0.9rem;line-height:1.6;}
+  .timer-bar{background:var(--bg2);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-top:20px;}
+  .timer-bar .timer-display{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--accent);}
+  .timer-bar button{padding:6px 14px;border-radius:10px;border:none;cursor:pointer;font-size:0.8rem;font-family:'DM Sans',sans-serif;font-weight:500;}
+  .rating-widget{margin:20px 0;}
+  .rating-stars{display:flex;gap:4px;margin-bottom:8px;}
+  .star-btn{background:none;border:none;font-size:1.5rem;cursor:pointer;line-height:1;}
+  .rating-avg{font-size:0.85rem;color:var(--text2);}
+  .shop-bar{background:var(--bg2);border-radius:12px;padding:14px 16px;margin-top:16px;display:flex;align-items:center;justify-content:space-between;}
+  .shop-bar p{font-size:0.85rem;color:var(--text2);}
+  .shop-btn{padding:7px 14px;background:var(--accent);color:white;border:none;border-radius:8px;cursor:pointer;font-size:0.8rem;font-family:'DM Sans',sans-serif;}
+  /* NUTRITION */
+  .nutrition-box{background:var(--bg2);border-radius:12px;padding:16px;margin:16px 0;}
+  .nutrition-title{font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2);margin-bottom:12px;}
+  .nutrition-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+  .nutrition-item{text-align:center;background:var(--card);border-radius:10px;padding:10px 6px;}
+  .nutrition-val{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--accent);font-weight:700;}
+  .nutrition-label{font-size:0.68rem;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:0.05em;}
+  .nutrition-bar{height:6px;border-radius:3px;background:var(--border);margin-top:6px;overflow:hidden;}
+  .nutrition-bar-fill{height:100%;border-radius:3px;background:var(--accent);}
+  .nutrition-note{font-size:0.72rem;color:var(--text2);margin-top:10px;font-style:italic;}
+  /* UNIT CONVERTER */
+  .converter-box{background:var(--bg2);border-radius:12px;padding:16px;margin:16px 0;}
+  .converter-title{font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2);margin-bottom:12px;}
+  .converter-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .converter-row input{width:80px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;}
+  .converter-row input:focus{outline:none;border-color:var(--accent);}
+  .converter-row select{padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;}
+  .converter-result{margin-top:10px;font-size:0.9rem;font-weight:500;color:var(--accent);}
+  /* SIMILAR RECIPES */
+  .similar-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+  .similar-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;flex:1;min-width:120px;}
+  .similar-card:hover{border-color:var(--accent);background:var(--card);}
+  .similar-emoji{font-size:1.4rem;}
+  .similar-info .similar-name{font-size:0.82rem;font-weight:500;}
+  .similar-info .similar-meta{font-size:0.72rem;color:var(--text2);}
+  /* COMMENTS */
+  .comments-section{margin-top:4px;}
+  .comment-input-wrap{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+  .comment-input-wrap textarea{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.875rem;resize:none;min-height:72px;}
+  .comment-input-wrap textarea:focus{outline:none;border-color:var(--accent);}
+  .comment-submit{align-self:flex-end;padding:7px 18px;background:var(--accent);color:white;border:none;border-radius:10px;cursor:pointer;font-size:0.85rem;font-family:'DM Sans',sans-serif;}
+  .comment-list{display:flex;flex-direction:column;gap:12px;}
+  .comment-item{background:var(--bg2);border-radius:12px;padding:12px 14px;}
+  .comment-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+  .comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0;}
+  .comment-author{font-weight:600;font-size:0.85rem;}
+  .comment-date{font-size:0.75rem;color:var(--text2);margin-left:auto;}
+  .comment-text{font-size:0.875rem;line-height:1.5;}
+  .comment-delete{background:none;border:none;color:var(--text2);cursor:pointer;font-size:0.75rem;}
+  .comment-delete:hover{color:#e04040;}
+  .no-comments{font-size:0.85rem;color:var(--text2);text-align:center;padding:16px 0;}
+  .login-prompt{font-size:0.85rem;color:var(--text2);background:var(--bg2);border-radius:10px;padding:12px 14px;text-align:center;}
+  .login-prompt a{color:var(--accent);cursor:pointer;text-decoration:underline;}
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.875rem;font-weight:500;transition:all 0.2s;}
+  .btn-primary{background:var(--accent);color:white;}
+  .btn-primary:hover{background:var(--accent2);}
+  .btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+  /* MODALS */
+  .modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--card);border-radius:20px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:36px;position:relative;}
+  .modal-close{position:absolute;top:16px;right:16px;background:var(--border);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:var(--text);display:flex;align-items:center;justify-content:center;}
+  .modal h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:8px;}
+  .modal p{color:var(--text2);margin-bottom:20px;font-size:0.9rem;}
+  .form-group{margin-bottom:14px;}
+  .form-group label{display:block;font-size:0.85rem;font-weight:500;margin-bottom:6px;color:var(--text2);}
+  .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--accent);}
+  .form-group textarea{resize:vertical;min-height:80px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .msg{font-size:0.85rem;padding:10px 14px;border-radius:10px;margin-top:12px;}
+  .msg-success{background:#d8f5e8;color:#1a7a40;}
+  .msg-error{background:#fde0e0;color:#a02020;}
+  .shop-list{list-style:none;}
+  .shop-list li{padding:8px 0;border-bottom:1px solid var(--border);font-size:0.9rem;display:flex;justify-content:space-between;align-items:center;}
+  .shop-list li:last-child{border-bottom:none;}
+  .shop-list li button{background:none;border:none;color:var(--text2);cursor:pointer;font-size:1rem;}
+  .shop-section-title{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2);margin:16px 0 8px;}
+  .empty{text-align:center;padding:80px 20px;color:var(--text2);}
+  .empty-icon{font-size:3rem;margin-bottom:16px;}
+  .tab-bar{display:flex;gap:8px;margin-bottom:24px;}
+  .tab-btn{padding:8px 20px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;font-size:0.875rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+  .tab-btn.active{background:var(--accent);color:white;border-color:var(--accent);}
+  footer{text-align:center;padding:32px;border-top:1px solid var(--border);color:var(--text2);font-size:0.85rem;margin-top:40px;}
+  footer a{color:var(--accent);text-decoration:none;}
 </style>
 </head>
 <body>
-
 <nav>
   <a class="nav-logo" href="index.html">🍴 Kitchen Hub</a>
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="kitchen.html" class="active">Recipes</a>
     <a href="planner.html">Meal Planner</a>
+    <a href="reviews.html">Reviews</a>
   </div>
   <div class="nav-right">
     <button id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
@@ -197,6 +233,51 @@
   <div id="detailContent"></div>
 </div>
 
+<!-- LOGIN GATE MODAL -->
+<div class="modal-overlay" id="loginGateModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('loginGateModal')">✕</button>
+    <h2>You need to log in</h2>
+    <p id="loginGateMsg">Log in or create an account to do this.</p>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn btn-primary" onclick="closeModal('loginGateModal');openModal('loginModal')" style="flex:1">Log In</button>
+      <button class="btn btn-ghost" onclick="closeModal('loginGateModal');openModal('signupModal')">Sign Up</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    <h2>Welcome back</h2>
+    <p>Log in to save favourites, rate, and comment on recipes.</p>
+    <div class="form-group"><label>Username</label><input id="liUser" placeholder="Your username"></div>
+    <div class="form-group"><label>Password</label><input id="liPass" type="password" placeholder="Your password"></div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn btn-primary" onclick="login()" style="flex:1">Log In</button>
+      <button class="btn btn-ghost" onclick="closeModal('loginModal');openModal('signupModal')">Sign Up</button>
+    </div>
+    <div id="loginMsg"></div>
+  </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal-overlay" id="signupModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('signupModal')">✕</button>
+    <h2>Create account</h2>
+    <p>Join to save favourites, rate recipes, and plan meals.</p>
+    <div class="form-group"><label>Username</label><input id="suUser" placeholder="Choose a username"></div>
+    <div class="form-group"><label>Password</label><input id="suPass" type="password" placeholder="Choose a password"></div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn btn-primary" onclick="createAccount()" style="flex:1">Create Account</button>
+      <button class="btn btn-ghost" onclick="closeModal('signupModal');openModal('loginModal')">Log In</button>
+    </div>
+    <div id="signupMsg"></div>
+  </div>
+</div>
+
 <!-- SUBMIT MODAL -->
 <div class="modal-overlay" id="submitModal">
   <div class="modal">
@@ -208,26 +289,16 @@
       <div class="form-group"><label>Emoji</label><input id="rEmoji" placeholder="🍝" maxlength="2" value="🍽️"></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Cuisine *</label>
-        <select id="rCuisine"><option value="Italian">Italian</option><option value="American">American</option><option value="Baking">Baking</option><option value="Other">Other</option></select>
-      </div>
-      <div class="form-group"><label>Difficulty *</label>
-        <select id="rDiff"><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option></select>
-      </div>
+      <div class="form-group"><label>Cuisine *</label><select id="rCuisine"><option value="Italian">Italian</option><option value="American">American</option><option value="Baking">Baking</option><option value="Other">Other</option></select></div>
+      <div class="form-group"><label>Difficulty *</label><select id="rDiff"><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option></select></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Cook Time (min) *</label><input id="rTime" type="number" placeholder="30" min="1"></div>
       <div class="form-group"><label>Base Servings</label><input id="rServings" type="number" placeholder="4" min="1"></div>
     </div>
-    <div class="form-group"><label>Ingredients * <span style="font-weight:300;font-size:0.8rem;">(one per line, e.g. "2 eggs")</span></label>
-      <textarea id="rIngredients" placeholder="200g pasta&#10;2 eggs&#10;100g bacon"></textarea>
-    </div>
-    <div class="form-group"><label>Steps * <span style="font-weight:300;font-size:0.8rem;">(one per line)</span></label>
-      <textarea id="rSteps" placeholder="Boil the pasta&#10;Cook the bacon&#10;Mix everything together"></textarea>
-    </div>
-    <div class="form-group"><label>Fun Fact <span style="font-weight:300;font-size:0.8rem;">(optional)</span></label>
-      <input id="rFact" placeholder="Did you know...">
-    </div>
+    <div class="form-group"><label>Ingredients * <span style="font-weight:300;font-size:0.8rem;">(one per line)</span></label><textarea id="rIngredients" placeholder="200g pasta&#10;2 eggs&#10;100g bacon"></textarea></div>
+    <div class="form-group"><label>Steps * <span style="font-weight:300;font-size:0.8rem;">(one per line)</span></label><textarea id="rSteps" placeholder="Boil the pasta&#10;Cook the bacon"></textarea></div>
+    <div class="form-group"><label>Fun Fact <span style="font-weight:300;font-size:0.8rem;">(optional)</span></label><input id="rFact" placeholder="Did you know..."></div>
     <div style="display:flex;gap:10px;margin-top:4px;">
       <button class="btn btn-primary" onclick="submitRecipe()" style="flex:1">Submit Recipe</button>
       <button class="btn btn-ghost" onclick="closeModal('submitModal')">Cancel</button>
@@ -252,280 +323,424 @@
 </div>
 
 <footer>
-  <p>Made with ❤️ · <a href="index.html">Home</a> · <a href="planner.html">Meal Planner</a></p>
+  <p>Made with ❤️ · <a href="index.html">Home</a> · <a href="planner.html">Meal Planner</a> · <a href="reviews.html">Reviews</a></p>
 </footer>
 
 <script>
-function toggleDark() {
-  const d = document.body.classList.toggle('dark');
-  localStorage.setItem('dark', d);
-  document.getElementById('darkBtn').textContent = d ? '☀️ Light' : '🌙 Dark';
-}
-if (localStorage.getItem('dark') === 'true') {
-  document.body.classList.add('dark');
-  document.getElementById('darkBtn').textContent = '☀️ Light';
-}
-function updateAuthUI() {
-  const user = localStorage.getItem('username');
-  const chip = document.getElementById('userChip');
-  if (user) { chip.style.display='flex'; document.getElementById('avatarLetter').textContent=user[0].toUpperCase(); document.getElementById('chipName').textContent=user; }
+// ── DARK MODE ──
+function toggleDark(){const d=document.body.classList.toggle('dark');localStorage.setItem('dark',d);document.getElementById('darkBtn').textContent=d?'☀️ Light':'🌙 Dark';}
+if(localStorage.getItem('dark')==='true'){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️ Light';}
+
+// ── AUTH ──
+function updateAuthUI(){
+  const user=localStorage.getItem('username');
+  const chip=document.getElementById('userChip');
+  if(user){chip.style.display='flex';document.getElementById('avatarLetter').textContent=user[0].toUpperCase();document.getElementById('chipName').textContent=user;}
   else chip.style.display='none';
 }
-function logout() { updateAuthUI(); }
-updateAuthUI();
-function openModal(id) { document.getElementById(id).classList.add('open'); if(id==='shopModal') renderShopList(); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); }));
+function createAccount(){
+  const u=document.getElementById('suUser').value.trim();
+  const p=document.getElementById('suPass').value;
+  const msg=document.getElementById('signupMsg');
+  if(!u||!p){msg.innerHTML='<div class="msg msg-error">Please fill all fields.</div>';return;}
+  localStorage.setItem('username',u);localStorage.setItem('password',p);
+  msg.innerHTML='<div class="msg msg-success">Account created!</div>';
+  setTimeout(()=>{closeModal('signupModal');updateAuthUI();msg.innerHTML='';},1200);
+}
+function login(){
+  const u=document.getElementById('liUser').value.trim();
+  const p=document.getElementById('liPass').value;
+  const msg=document.getElementById('loginMsg');
+  if(u===localStorage.getItem('username')&&p===localStorage.getItem('password')){
+    msg.innerHTML='<div class="msg msg-success">Welcome back, '+u+'!</div>';
+    setTimeout(()=>{closeModal('loginModal');updateAuthUI();msg.innerHTML='';renderGrid();},1000);
+  }else{msg.innerHTML='<div class="msg msg-error">Wrong username or password.</div>';}
+}
+function logout(){updateAuthUI();renderGrid();}
 
-const BASE_RECIPES = [
-  { id:'carbonara', emoji:'🍝', title:'Spaghetti Carbonara', cuisine:'Italian', diff:'Medium', time:25, servings:2, desc:'A classic Roman pasta dish with eggs, cheese, and crispy bacon — no cream needed.', fact:'Carbonara was popularized in Rome after WWII, with no cream ever in the original recipe.', ingredients:[{amt:'200g',name:'spaghetti'},{amt:'2',name:'eggs'},{amt:'100g',name:'guanciale or bacon'},{amt:'50g',name:'Pecorino Romano'},{amt:'1 tsp',name:'black pepper'}], steps:['Boil salted water and cook spaghetti al dente.','Fry the guanciale until crispy.','Beat eggs with grated Pecorino and black pepper.','Take pasta off heat, mix in egg mixture quickly.','Add pasta water to make it creamy. Serve immediately.'] },
-  { id:'bolognese', emoji:'🍝', title:'Bolognese', cuisine:'Italian', diff:'Easy', time:60, servings:4, desc:'Rich slow-cooked meat sauce from Bologna.', fact:'The original Bolognese from 1982 contains no garlic, and uses very little tomato.', ingredients:[{amt:'400g',name:'spaghetti'},{amt:'300g',name:'minced beef'},{amt:'1',name:'onion, finely diced'},{amt:'2',name:'carrots, finely diced'},{amt:'400g',name:'crushed tomatoes'},{amt:'100ml',name:'red wine'}], steps:['Fry onion and carrot until soft, about 8 min.','Add mince, cook until browned.','Pour in wine, simmer 5 min.','Add tomatoes, season, simmer 40 min on low heat.','Cook pasta and serve with sauce on top.'] },
-  { id:'pesto', emoji:'🌿', title:'Pesto Pasta', cuisine:'Italian', diff:'Easy', time:15, servings:2, desc:'The quickest Italian dinner you can make.', fact:'Traditional Ligurian pesto uses a marble mortar, never a blender.', ingredients:[{amt:'200g',name:'spaghetti or trofie'},{amt:'4 tbsp',name:'pesto'},{amt:'30g',name:'Parmesan, grated'},{amt:'handful',name:'cherry tomatoes'}], steps:['Cook pasta in salted water until al dente.','Reserve a cup of pasta water.','Drain pasta, toss with pesto and pasta water.','Serve with Parmesan and halved cherry tomatoes.'] },
-  { id:'lasagna', emoji:'🫕', title:'Classic Lasagna', cuisine:'Italian', diff:'Hard', time:90, servings:6, desc:'Layers of pasta, rich bolognese, creamy béchamel, and melted cheese.', fact:'Lasagna is one of the oldest pasta dishes in Italy, dating back to the Middle Ages.', ingredients:[{amt:'12',name:'lasagna sheets'},{amt:'500g',name:'minced beef'},{amt:'400g',name:'crushed tomatoes'},{amt:'500ml',name:'béchamel sauce'},{amt:'200g',name:'mozzarella'},{amt:'1',name:'onion'}], steps:['Make bolognese: fry onion, brown mince, add tomatoes, simmer 30 min.','Make béchamel: melt butter, whisk in flour, add warm milk slowly.','Preheat oven to 190°C.','Layer: pasta → bolognese → béchamel → cheese. Repeat 3 times.','Bake 35–40 min until golden and bubbling. Rest 10 min before serving.'] },
-  { id:'burger', emoji:'🍔', title:'Classic Smash Burger', cuisine:'American', diff:'Easy', time:20, servings:2, desc:'Crispy-edged, juicy smash burgers with special sauce.', fact:'Smash burgers get their flavour from the Maillard reaction when beef hits a very hot flat surface.', ingredients:[{amt:'300g',name:'80/20 minced beef'},{amt:'2',name:'brioche buns'},{amt:'2',name:'slices American cheese'},{amt:'1 tbsp',name:'butter'},{amt:'1',name:'onion, thinly sliced'},{amt:'Lettuce, pickles, ketchup',name:'to serve'}], steps:['Divide beef into 2 loose balls, season well.','Heat a cast iron pan until very hot, add butter.','Add beef ball, smash flat immediately with a spatula.','Cook 2 min, flip, add cheese, cook 1 more min.','Toast buns, build burger with sauce. Serve hot.'] },
-  { id:'mac', emoji:'🧀', title:'Baked Mac & Cheese', cuisine:'American', diff:'Medium', time:45, servings:4, desc:'Creamy stovetop mac with a golden breadcrumb crust.', fact:'Macaroni and cheese became widely popular in the US after Thomas Jefferson served it at a White House dinner.', ingredients:[{amt:'300g',name:'macaroni'},{amt:'3 tbsp',name:'butter'},{amt:'3 tbsp',name:'flour'},{amt:'600ml',name:'whole milk'},{amt:'250g',name:'cheddar, grated'},{amt:'50g',name:'breadcrumbs'}], steps:['Cook macaroni until just underdone, drain.','Melt butter, whisk in flour to make roux, cook 2 min.','Add warm milk gradually, stir until thick and smooth.','Off heat, stir in most of the cheddar. Season.','Mix sauce with pasta, pour in baking dish, top with breadcrumbs and remaining cheese.','Bake at 200°C for 20–25 min until golden.'] },
-  { id:'ribs', emoji:'🥩', title:'BBQ Baby Back Ribs', cuisine:'American', diff:'Hard', time:180, servings:4, desc:'Fall-off-the-bone tender ribs with a sticky homemade BBQ glaze.', fact:'The term "barbecue" comes from the Taíno word "barbacoa".', ingredients:[{amt:'2 racks',name:'baby back pork ribs'},{amt:'2 tbsp',name:'brown sugar'},{amt:'1 tsp each',name:'smoked paprika, garlic powder, onion powder'},{amt:'200ml',name:'BBQ sauce'},{amt:'1 tbsp',name:'apple cider vinegar'}], steps:['Remove membrane from back of ribs.','Mix sugar and spices, rub all over ribs. Rest 1 hour.','Wrap in foil, bake at 150°C for 2.5 hours.','Unwrap, brush with BBQ sauce mixed with vinegar.','Grill or broil 10 min, basting twice, until sticky and caramelised.'] },
-  { id:'chicken', emoji:'🍗', title:'Garlic Butter Chicken Rice', cuisine:'American', diff:'Easy', time:40, servings:3, desc:'One-pan garlic butter chicken served on fluffy rice.', fact:'Rice became a staple American side dish thanks largely to cultivation in South Carolina from the 1600s.', ingredients:[{amt:'3',name:'chicken thighs'},{amt:'1.5 cups',name:'long grain rice'},{amt:'4 cloves',name:'garlic, minced'},{amt:'2 tbsp',name:'butter'},{amt:'500ml',name:'chicken stock'},{amt:'1 tbsp',name:'soy sauce'}], steps:['Season chicken thighs, sear skin-side down in butter until golden, set aside.','In same pan, fry garlic 1 min, add rice, stir 2 min.','Pour in stock and soy sauce, bring to boil.','Place chicken on top, cover, simmer 18–20 min until rice absorbs all liquid.','Rest 5 min before serving.'] },
-  { id:'cake', emoji:'🍰', title:'Chocolate Fudge Cake', cuisine:'Baking', diff:'Medium', time:60, servings:8, desc:'A deeply chocolatey, fudgy layered cake with silky ganache frosting.', fact:'Chocolate cake became popular in America in the 1880s after cocoa powder became widely available.', ingredients:[{amt:'200g',name:'plain flour'},{amt:'200g',name:'caster sugar'},{amt:'50g',name:'cocoa powder'},{amt:'1.5 tsp',name:'baking powder'},{amt:'2',name:'eggs'},{amt:'200ml',name:'whole milk'},{amt:'100ml',name:'vegetable oil'},{amt:'200g',name:'dark chocolate (for ganache)'},{amt:'200ml',name:'double cream'}], steps:['Preheat oven to 180°C. Grease two 20cm round tins.','Mix all dry ingredients in a large bowl.','Whisk wet ingredients separately, combine with dry.','Pour into tins, bake 30–35 min.','Heat cream to simmer, pour over chopped chocolate. Stir until smooth.','Cool cakes, sandwich and frost with ganache.'] },
-  { id:'cookies', emoji:'🍪', title:'Brown Butter Cookies', cuisine:'Baking', diff:'Easy', time:30, servings:20, desc:'Chewy, nutty cookies made with browned butter for incredible depth of flavour.', fact:'Brown butter gets its nutty flavour from the Maillard reaction of milk solids.', ingredients:[{amt:'225g',name:'butter'},{amt:'200g',name:'brown sugar'},{amt:'50g',name:'caster sugar'},{amt:'2',name:'eggs'},{amt:'2 tsp',name:'vanilla extract'},{amt:'280g',name:'plain flour'},{amt:'1 tsp',name:'baking soda'},{amt:'200g',name:'chocolate chips'}], steps:['Brown butter in a saucepan until golden and nutty. Cool 15 min.','Beat browned butter with both sugars until fluffy.','Add eggs and vanilla, beat until pale.','Fold in flour and baking soda, then chocolate chips.','Roll into balls, bake at 175°C for 11–13 min.','Cool on tray — they firm up as they cool.'] },
-  { id:'banana_bread', emoji:'🍌', title:'Banana Bread', cuisine:'Baking', diff:'Easy', time:70, servings:8, desc:'Super moist banana bread with a caramelised top.', fact:'Banana bread recipes first appeared in cookbooks during the 1930s Great Depression.', ingredients:[{amt:'3',name:'very ripe bananas'},{amt:'175g',name:'self-raising flour'},{amt:'150g',name:'caster sugar'},{amt:'75g',name:'butter, melted'},{amt:'2',name:'eggs'},{amt:'1 tsp',name:'vanilla extract'}], steps:['Preheat oven to 170°C. Line a loaf tin.','Mash bananas well with a fork.','Mix in melted butter, sugar, eggs, and vanilla.','Fold in flour until just combined — don\'t overmix.','Pour into tin, bake 55–60 min until a skewer comes out clean.','Cool in tin 10 min, then turn out.'] },
-  { id:'cheesecake', emoji:'🎂', title:'New York Cheesecake', cuisine:'Baking', diff:'Hard', time:90, servings:10, desc:'Dense, creamy New York–style cheesecake with a buttery biscuit base.', fact:'New York cheesecake uses extra egg yolks and cream cheese to achieve its distinctive dense texture.', ingredients:[{amt:'200g',name:'digestive biscuits, crushed'},{amt:'80g',name:'butter, melted'},{amt:'600g',name:'cream cheese'},{amt:'150g',name:'caster sugar'},{amt:'3',name:'eggs + 1 yolk'},{amt:'200ml',name:'sour cream'},{amt:'1 tsp',name:'vanilla extract'}], steps:['Mix crushed biscuits with melted butter, press into springform tin. Chill 20 min.','Preheat oven to 160°C.','Beat cream cheese and sugar until smooth. Add eggs one at a time.','Mix in sour cream and vanilla. Pour over base.','Bake 55–60 min until just set with a slight wobble.','Turn oven off, leave door ajar, cool inside for 1 hour. Refrigerate overnight.'] },
+// ── LOGIN GATE ──
+function requireLogin(action, message){
+  if(localStorage.getItem('username')) return true;
+  document.getElementById('loginGateMsg').textContent = message || 'Log in or create an account to do this.';
+  openModal('loginGateModal');
+  return false;
+}
+
+// ── MODAL ──
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+updateAuthUI();
+
+// ── NUTRITION DB ──
+const NUTRITION_DB={
+  pasta:{cal:357,protein:13,carbs:71,fat:1.5},spaghetti:{cal:357,protein:13,carbs:71,fat:1.5},macaroni:{cal:357,protein:13,carbs:71,fat:1.5},
+  rice:{cal:360,protein:7,carbs:79,fat:0.6},flour:{cal:364,protein:10,carbs:76,fat:1},
+  beef:{cal:250,protein:26,carbs:0,fat:17},mince:{cal:250,protein:26,carbs:0,fat:17},
+  chicken:{cal:165,protein:31,carbs:0,fat:4},bacon:{cal:540,protein:37,carbs:1,fat:42},
+  guanciale:{cal:550,protein:20,carbs:0,fat:52},pork:{cal:290,protein:28,carbs:0,fat:20},
+  egg:{cal:155,protein:13,carbs:1,fat:11},eggs:{cal:155,protein:13,carbs:1,fat:11},
+  milk:{cal:61,protein:3,carbs:5,fat:3},cream:{cal:340,protein:2,carbs:3,fat:35},
+  butter:{cal:717,protein:1,carbs:0,fat:81},cheese:{cal:400,protein:25,carbs:1,fat:33},
+  cheddar:{cal:400,protein:25,carbs:1,fat:33},mozzarella:{cal:300,protein:22,carbs:2,fat:22},
+  parmesan:{cal:431,protein:38,carbs:4,fat:29},pecorino:{cal:420,protein:31,carbs:0,fat:33},
+  'cream cheese':{cal:342,protein:6,carbs:4,fat:34},'sour cream':{cal:193,protein:3,carbs:5,fat:19},
+  tomato:{cal:18,protein:1,carbs:4,fat:0.2},onion:{cal:40,protein:1,carbs:9,fat:0.1},
+  garlic:{cal:149,protein:6,carbs:33,fat:0.5},carrot:{cal:41,protein:1,carbs:10,fat:0.2},
+  pesto:{cal:430,protein:8,carbs:5,fat:43},sugar:{cal:387,protein:0,carbs:100,fat:0},
+  'brown sugar':{cal:380,protein:0,carbs:98,fat:0},cocoa:{cal:228,protein:20,carbs:58,fat:14},
+  chocolate:{cal:546,protein:5,carbs:60,fat:31},oil:{cal:884,protein:0,carbs:0,fat:100},
+  banana:{cal:89,protein:1,carbs:23,fat:0.3},biscuit:{cal:458,protein:6,carbs:67,fat:20},
+  'bbq sauce':{cal:120,protein:1,carbs:28,fat:0.5},'soy sauce':{cal:60,protein:8,carbs:6,fat:0},
+};
+function parseIngNutrition(ing){
+  const m=ing.amt.match(/^([\d.\/]+)\s*(\w+)?/);
+  if(!m) return null;
+  let qty=m[1].includes('/')?eval(m[1]):parseFloat(m[1]);
+  const unit=(m[2]||'').toLowerCase();
+  let grams=0;
+  if(unit==='g'||unit==='kg') grams=unit==='kg'?qty*1000:qty;
+  else if(unit==='ml'||unit==='l') grams=unit==='l'?qty*1000:qty;
+  else if(unit==='tbsp') grams=qty*15;
+  else if(unit==='tsp') grams=qty*5;
+  else if(unit==='cup'||unit==='cups') grams=qty*240;
+  else if(unit==='oz') grams=qty*28;
+  else if(unit==='lb'||unit==='lbs') grams=qty*454;
+  else if(unit==='rack'||unit==='racks') grams=qty*600;
+  else grams=qty*80;
+  const name=ing.name.toLowerCase();
+  let match=null;
+  for(const key of Object.keys(NUTRITION_DB).sort((a,b)=>b.length-a.length)){if(name.includes(key)){match=NUTRITION_DB[key];break;}}
+  if(!match) return null;
+  const f=grams/100;
+  return{cal:Math.round(match.cal*f),protein:Math.round(match.protein*f*10)/10,carbs:Math.round(match.carbs*f*10)/10,fat:Math.round(match.fat*f*10)/10};
+}
+function estimateNutrition(recipe,servings){
+  let t={cal:0,protein:0,carbs:0,fat:0};let matched=0;
+  recipe.ingredients.forEach(ing=>{const n=parseIngNutrition(ing);if(n){t.cal+=n.cal;t.protein+=n.protein;t.carbs+=n.carbs;t.fat+=n.fat;matched++;}});
+  const s=servings||recipe.servings||2;
+  return{cal:Math.round(t.cal/s),protein:Math.round(t.protein/s*10)/10,carbs:Math.round(t.carbs/s*10)/10,fat:Math.round(t.fat/s*10)/10,matched,total:recipe.ingredients.length};
+}
+function nutritionHTML(recipe,servings){
+  const n=estimateNutrition(recipe,servings);
+  return`<div class="nutrition-box"><div class="nutrition-title">📊 Nutrition per serving (estimated)</div><div class="nutrition-grid">
+    <div class="nutrition-item"><div class="nutrition-val">${n.cal}</div><div class="nutrition-label">Calories</div><div class="nutrition-bar"><div class="nutrition-bar-fill" style="width:${Math.min(100,n.cal/25)}%"></div></div></div>
+    <div class="nutrition-item"><div class="nutrition-val">${n.protein}g</div><div class="nutrition-label">Protein</div><div class="nutrition-bar"><div class="nutrition-bar-fill" style="width:${Math.min(100,n.protein/0.5)}%;background:#4aaa70"></div></div></div>
+    <div class="nutrition-item"><div class="nutrition-val">${n.carbs}g</div><div class="nutrition-label">Carbs</div><div class="nutrition-bar"><div class="nutrition-bar-fill" style="width:${Math.min(100,n.carbs/0.6)}%;background:#d4aa40"></div></div></div>
+    <div class="nutrition-item"><div class="nutrition-val">${n.fat}g</div><div class="nutrition-label">Fat</div><div class="nutrition-bar"><div class="nutrition-bar-fill" style="width:${Math.min(100,n.fat/0.44)}%;background:#e06060"></div></div></div>
+  </div><div class="nutrition-note">Based on ${n.matched}/${n.total} recognised ingredients. Values are approximate.</div></div>`;
+}
+
+// ── UNIT CONVERTER ──
+function converterHTML(){
+  return`<div class="converter-box">
+    <div class="converter-title">⚖️ Unit Converter</div>
+    <div class="converter-row">
+      <input type="number" id="convVal" placeholder="e.g. 200" oninput="doConvert()">
+      <select id="convFrom" onchange="doConvert()">
+        <option value="g">grams (g)</option><option value="kg">kilograms (kg)</option>
+        <option value="oz">ounces (oz)</option><option value="lb">pounds (lb)</option>
+        <option value="ml">millilitres (ml)</option><option value="l">litres (l)</option>
+        <option value="cup">cups</option><option value="tbsp">tablespoons</option>
+        <option value="tsp">teaspoons</option>
+      </select>
+      <span style="color:var(--text2);font-size:0.9rem;">→</span>
+      <select id="convTo" onchange="doConvert()">
+        <option value="g">grams (g)</option><option value="kg">kilograms (kg)</option>
+        <option value="oz">ounces (oz)</option><option value="lb">pounds (lb)</option>
+        <option value="ml">millilitres (ml)</option><option value="l">litres (l)</option>
+        <option value="cup">cups</option><option value="tbsp">tablespoons</option>
+        <option value="tsp">teaspoons</option>
+      </select>
+    </div>
+    <div class="converter-result" id="convResult">Enter a value above to convert</div>
+  </div>`;
+}
+function doConvert(){
+  const val=parseFloat(document.getElementById('convVal').value);
+  const from=document.getElementById('convFrom').value;
+  const to=document.getElementById('convTo').value;
+  const result=document.getElementById('convResult');
+  if(isNaN(val)){result.textContent='Enter a value above to convert';return;}
+  // Convert to grams/ml first (base unit)
+  const toBase={g:1,kg:1000,oz:28.3495,lb:453.592,ml:1,l:1000,cup:240,tbsp:14.787,tsp:4.929};
+  const fromBase={g:1,kg:0.001,oz:0.035274,lb:0.0022046,ml:1,l:0.001,cup:0.004167,tbsp:0.067628,tsp:0.202884};
+  if(from===to){result.textContent=`${val} ${from} = ${val} ${to}`;return;}
+  const base=val*toBase[from];
+  const converted=Math.round(base*fromBase[to]*10000)/10000;
+  result.textContent=`${val} ${from} = ${converted} ${to}`;
+}
+
+// ── SIMILAR RECIPES ──
+function getSimilar(recipe){
+  return allRecipes
+    .filter(r=>r.id!==recipe.id&&(r.cuisine===recipe.cuisine||r.diff===recipe.diff))
+    .slice(0,3);
+}
+function similarHTML(recipe){
+  const similar=getSimilar(recipe);
+  if(!similar.length) return '';
+  return`<div class="section-label">🍽 Similar Recipes</div>
+    <div class="similar-grid">${similar.map(r=>`
+      <div class="similar-card" onclick="openDetail('${r.id}')">
+        <span class="similar-emoji">${r.emoji}</span>
+        <div class="similar-info">
+          <div class="similar-name">${r.title}</div>
+          <div class="similar-meta">${r.diff} · ${r.time}min</div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+}
+
+// ── COMMENTS ──
+function getComments(id){return JSON.parse(localStorage.getItem('comments_'+id)||'[]');}
+function saveComments(id,c){localStorage.setItem('comments_'+id,JSON.stringify(c));}
+function commentsHTML(recipeId){
+  const user=localStorage.getItem('username');
+  const comments=getComments(recipeId);
+  const inputSection=user?`
+    <div class="comment-input-wrap">
+      <textarea id="commentInput_${recipeId}" placeholder="Share your thoughts or tips... (max 200 words)" maxlength="1200"></textarea>
+      <button class="comment-submit" onclick="postComment('${recipeId}')">Post Comment</button>
+    </div>`
+    :`<div class="login-prompt">👤 <a onclick="requireLogin(null,'Log in to leave a comment.')">Log in</a> to leave a comment.</div>`;
+  const list=comments.length?comments.map((c,i)=>`
+    <div class="comment-item">
+      <div class="comment-header">
+        <div class="comment-avatar">${c.author[0].toUpperCase()}</div>
+        <span class="comment-author">${c.author}</span>
+        ${user===c.author?`<button class="comment-delete" onclick="deleteComment('${recipeId}',${i})">🗑</button>`:''}
+        <span class="comment-date">${c.date}</span>
+      </div>
+      <div class="comment-text">${c.text}</div>
+    </div>`).join('')
+    :`<div class="no-comments">No comments yet. Be the first!</div>`;
+  return`<div class="comments-section">${inputSection}<div class="comment-list" id="commentList_${recipeId}">${list}</div></div>`;
+}
+function postComment(recipeId){
+  if(!requireLogin(null,'Log in to leave a comment.')) return;
+  const user=localStorage.getItem('username');
+  const input=document.getElementById('commentInput_'+recipeId);
+  const text=input.value.trim();
+  if(!text) return;
+  const words=text.split(/\s+/).length;
+  if(words>200){alert('Comments are limited to 200 words. Yours has '+words+' words.');return;}
+  const comments=getComments(recipeId);
+  comments.unshift({author:user,text,date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
+  saveComments(recipeId,comments);
+  input.value='';
+  document.getElementById('commentList_'+recipeId).innerHTML=comments.map((c,i)=>`
+    <div class="comment-item">
+      <div class="comment-header">
+        <div class="comment-avatar">${c.author[0].toUpperCase()}</div>
+        <span class="comment-author">${c.author}</span>
+        ${user===c.author?`<button class="comment-delete" onclick="deleteComment('${recipeId}',${i})">🗑</button>`:''}
+        <span class="comment-date">${c.date}</span>
+      </div>
+      <div class="comment-text">${c.text}</div>
+    </div>`).join('');
+}
+function deleteComment(recipeId,index){
+  const comments=getComments(recipeId);
+  comments.splice(index,1);
+  saveComments(recipeId,comments);
+  const r=allRecipes.find(x=>x.id===recipeId);
+  if(r) renderDetail(r);
+}
+
+// ── RECIPES DATA ──
+const BASE_RECIPES=[
+  {id:'carbonara',emoji:'🍝',title:'Spaghetti Carbonara',cuisine:'Italian',diff:'Medium',time:25,servings:2,desc:'A classic Roman pasta dish with eggs, cheese, and crispy bacon — no cream needed.',fact:'Carbonara was popularized in Rome after WWII, with no cream ever in the original recipe.',ingredients:[{amt:'200g',name:'spaghetti'},{amt:'2',name:'eggs'},{amt:'100g',name:'guanciale or bacon'},{amt:'50g',name:'Pecorino Romano'},{amt:'1 tsp',name:'black pepper'}],steps:['Boil salted water and cook spaghetti al dente.','Fry the guanciale until crispy.','Beat eggs with grated Pecorino and black pepper.','Take pasta off heat, mix in egg mixture quickly.','Add pasta water to make it creamy. Serve immediately.']},
+  {id:'bolognese',emoji:'🍝',title:'Bolognese',cuisine:'Italian',diff:'Easy',time:60,servings:4,desc:'Rich slow-cooked meat sauce from Bologna.',fact:'The original Bolognese from 1982 contains no garlic, and uses very little tomato.',ingredients:[{amt:'400g',name:'spaghetti'},{amt:'300g',name:'minced beef'},{amt:'1',name:'onion, finely diced'},{amt:'2',name:'carrots, finely diced'},{amt:'400g',name:'crushed tomatoes'},{amt:'100ml',name:'red wine'}],steps:['Fry onion and carrot until soft, about 8 min.','Add mince, cook until browned.','Pour in wine, simmer 5 min.','Add tomatoes, season, simmer 40 min on low heat.','Cook pasta and serve with sauce on top.']},
+  {id:'pesto',emoji:'🌿',title:'Pesto Pasta',cuisine:'Italian',diff:'Easy',time:15,servings:2,desc:'The quickest Italian dinner you can make.',fact:'Traditional Ligurian pesto uses a marble mortar, never a blender.',ingredients:[{amt:'200g',name:'spaghetti or trofie'},{amt:'4 tbsp',name:'pesto'},{amt:'30g',name:'Parmesan, grated'},{amt:'handful',name:'cherry tomatoes'}],steps:['Cook pasta in salted water until al dente.','Reserve a cup of pasta water.','Drain pasta, toss with pesto and pasta water.','Serve with Parmesan and halved cherry tomatoes.']},
+  {id:'lasagna',emoji:'🫕',title:'Classic Lasagna',cuisine:'Italian',diff:'Hard',time:90,servings:6,desc:'Layers of pasta, rich bolognese, creamy béchamel, and melted cheese.',fact:'Lasagna is one of the oldest pasta dishes in Italy, dating back to the Middle Ages.',ingredients:[{amt:'12',name:'lasagna sheets'},{amt:'500g',name:'minced beef'},{amt:'400g',name:'crushed tomatoes'},{amt:'500ml',name:'béchamel sauce'},{amt:'200g',name:'mozzarella'},{amt:'1',name:'onion'}],steps:['Make bolognese: fry onion, brown mince, add tomatoes, simmer 30 min.','Make béchamel: melt butter, whisk in flour, add warm milk slowly.','Preheat oven to 190°C.','Layer: pasta → bolognese → béchamel → cheese. Repeat 3 times.','Bake 35–40 min until golden and bubbling. Rest 10 min before serving.']},
+  {id:'burger',emoji:'🍔',title:'Classic Smash Burger',cuisine:'American',diff:'Easy',time:20,servings:2,desc:'Crispy-edged, juicy smash burgers with special sauce.',fact:'Smash burgers get their flavour from the Maillard reaction when beef hits a very hot flat surface.',ingredients:[{amt:'300g',name:'80/20 minced beef'},{amt:'2',name:'brioche buns'},{amt:'2',name:'slices American cheese'},{amt:'1 tbsp',name:'butter'},{amt:'1',name:'onion, thinly sliced'},{amt:'Lettuce, pickles, ketchup',name:'to serve'}],steps:['Divide beef into 2 loose balls, season well.','Heat a cast iron pan until very hot, add butter.','Add beef ball, smash flat immediately with a spatula.','Cook 2 min, flip, add cheese, cook 1 more min.','Toast buns, build burger with sauce. Serve hot.']},
+  {id:'mac',emoji:'🧀',title:'Baked Mac & Cheese',cuisine:'American',diff:'Medium',time:45,servings:4,desc:'Creamy stovetop mac with a golden breadcrumb crust.',fact:'Macaroni and cheese became popular in the US after Thomas Jefferson served it at a White House dinner.',ingredients:[{amt:'300g',name:'macaroni'},{amt:'3 tbsp',name:'butter'},{amt:'3 tbsp',name:'flour'},{amt:'600ml',name:'whole milk'},{amt:'250g',name:'cheddar, grated'},{amt:'50g',name:'breadcrumbs'}],steps:['Cook macaroni until just underdone, drain.','Melt butter, whisk in flour, cook 2 min.','Add warm milk gradually, stir until thick.','Off heat, stir in cheddar. Season.','Mix with pasta, top with breadcrumbs and cheese.','Bake at 200°C for 20–25 min until golden.']},
+  {id:'ribs',emoji:'🥩',title:'BBQ Baby Back Ribs',cuisine:'American',diff:'Hard',time:180,servings:4,desc:'Fall-off-the-bone tender ribs with a sticky BBQ glaze.',fact:'The term "barbecue" comes from the Taíno word "barbacoa".',ingredients:[{amt:'2 racks',name:'baby back pork ribs'},{amt:'2 tbsp',name:'brown sugar'},{amt:'1 tsp each',name:'smoked paprika, garlic powder, onion powder'},{amt:'200ml',name:'BBQ sauce'},{amt:'1 tbsp',name:'apple cider vinegar'}],steps:['Remove membrane from back of ribs.','Mix sugar and spices, rub all over ribs. Rest 1 hour.','Wrap in foil, bake at 150°C for 2.5 hours.','Unwrap, brush with BBQ sauce mixed with vinegar.','Grill 10 min, basting twice, until sticky and caramelised.']},
+  {id:'chicken',emoji:'🍗',title:'Garlic Butter Chicken Rice',cuisine:'American',diff:'Easy',time:40,servings:3,desc:'One-pan garlic butter chicken served on fluffy rice.',fact:'Rice became a staple American side dish from cultivation in South Carolina from the 1600s.',ingredients:[{amt:'3',name:'chicken thighs'},{amt:'1.5 cups',name:'long grain rice'},{amt:'4 cloves',name:'garlic, minced'},{amt:'2 tbsp',name:'butter'},{amt:'500ml',name:'chicken stock'},{amt:'1 tbsp',name:'soy sauce'}],steps:['Season chicken thighs, sear skin-side down in butter until golden, set aside.','In same pan, fry garlic 1 min, add rice, stir 2 min.','Pour in stock and soy sauce, bring to boil.','Place chicken on top, cover, simmer 18–20 min.','Rest 5 min before serving.']},
+  {id:'cake',emoji:'🍰',title:'Chocolate Fudge Cake',cuisine:'Baking',diff:'Medium',time:60,servings:8,desc:'A deeply chocolatey, fudgy layered cake with silky ganache frosting.',fact:'Chocolate cake became popular in America in the 1880s after cocoa powder became widely available.',ingredients:[{amt:'200g',name:'plain flour'},{amt:'200g',name:'caster sugar'},{amt:'50g',name:'cocoa powder'},{amt:'1.5 tsp',name:'baking powder'},{amt:'2',name:'eggs'},{amt:'200ml',name:'whole milk'},{amt:'100ml',name:'vegetable oil'},{amt:'200g',name:'dark chocolate (for ganache)'},{amt:'200ml',name:'double cream'}],steps:['Preheat oven to 180°C. Grease two 20cm round tins.','Mix all dry ingredients in a large bowl.','Whisk wet ingredients separately, combine with dry.','Pour into tins, bake 30–35 min.','Heat cream to simmer, pour over chopped chocolate. Stir until smooth.','Cool cakes, sandwich and frost with ganache.']},
+  {id:'cookies',emoji:'🍪',title:'Brown Butter Cookies',cuisine:'Baking',diff:'Easy',time:30,servings:20,desc:'Chewy, nutty cookies made with browned butter.',fact:'Brown butter gets its nutty flavour from the Maillard reaction of milk solids.',ingredients:[{amt:'225g',name:'butter'},{amt:'200g',name:'brown sugar'},{amt:'50g',name:'caster sugar'},{amt:'2',name:'eggs'},{amt:'2 tsp',name:'vanilla extract'},{amt:'280g',name:'plain flour'},{amt:'1 tsp',name:'baking soda'},{amt:'200g',name:'chocolate chips'}],steps:['Brown butter in a saucepan until golden and nutty. Cool 15 min.','Beat browned butter with both sugars until fluffy.','Add eggs and vanilla, beat until pale.','Fold in flour and baking soda, then chocolate chips.','Roll into balls, bake at 175°C for 11–13 min.','Cool on tray — they firm up as they cool.']},
+  {id:'banana_bread',emoji:'🍌',title:'Banana Bread',cuisine:'Baking',diff:'Easy',time:70,servings:8,desc:'Super moist banana bread with a caramelised top.',fact:'Banana bread recipes first appeared in cookbooks during the 1930s Great Depression.',ingredients:[{amt:'3',name:'very ripe bananas'},{amt:'175g',name:'self-raising flour'},{amt:'150g',name:'caster sugar'},{amt:'75g',name:'butter, melted'},{amt:'2',name:'eggs'},{amt:'1 tsp',name:'vanilla extract'}],steps:['Preheat oven to 170°C. Line a loaf tin.','Mash bananas well with a fork.','Mix in melted butter, sugar, eggs, and vanilla.','Fold in flour until just combined.','Pour into tin, bake 55–60 min until a skewer comes out clean.','Cool in tin 10 min, then turn out.']},
+  {id:'cheesecake',emoji:'🎂',title:'New York Cheesecake',cuisine:'Baking',diff:'Hard',time:90,servings:10,desc:'Dense, creamy New York–style cheesecake with a buttery biscuit base.',fact:'New York cheesecake uses extra egg yolks and cream cheese to achieve its distinctive dense texture.',ingredients:[{amt:'200g',name:'digestive biscuits, crushed'},{amt:'80g',name:'butter, melted'},{amt:'600g',name:'cream cheese'},{amt:'150g',name:'caster sugar'},{amt:'3',name:'eggs + 1 yolk'},{amt:'200ml',name:'sour cream'},{amt:'1 tsp',name:'vanilla extract'}],steps:['Mix crushed biscuits with melted butter, press into springform tin. Chill 20 min.','Preheat oven to 160°C.','Beat cream cheese and sugar until smooth. Add eggs one at a time.','Mix in sour cream and vanilla. Pour over base.','Bake 55–60 min until just set with a slight wobble.','Turn oven off, leave door ajar, cool inside 1 hour. Refrigerate overnight.']},
 ];
 
-let allRecipes = [];
-let currentTab = 'all';
-let filters = { cuisine:'all', diff:'all' };
-let currentRecipeId = null;
-let currentServings = 1;
-let baseServings = 1;
+let allRecipes=[];
+let currentTab='all';
+let filters={cuisine:'all',diff:'all'};
+let currentRecipeId=null;
+let currentServings=1;
+let baseServings=1;
 
-function loadAllRecipes() {
-  const custom = JSON.parse(localStorage.getItem('customRecipes') || '[]');
-  allRecipes = [...BASE_RECIPES, ...custom];
-}
-function setFilter(btn, type) {
-  document.querySelectorAll(`[data-filter][onclick*="${type}"]`).forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  filters[type] = btn.dataset.filter;
-  renderGrid();
-}
-function setTab(btn, tab) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentTab = tab;
-  renderGrid();
-}
-function getFilteredRecipes() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const favs = JSON.parse(localStorage.getItem('favs') || '[]');
-  const custom = JSON.parse(localStorage.getItem('customRecipes') || '[]');
-  return allRecipes.filter(r => {
-    if (currentTab === 'favs' && !favs.includes(r.id)) return false;
-    if (currentTab === 'mine' && !custom.find(c => c.id === r.id)) return false;
-    if (filters.cuisine !== 'all' && r.cuisine !== filters.cuisine) return false;
-    if (filters.diff !== 'all' && r.diff !== filters.diff) return false;
-    if (q && !r.title.toLowerCase().includes(q) && !r.cuisine.toLowerCase().includes(q)) return false;
+function loadAllRecipes(){const custom=JSON.parse(localStorage.getItem('customRecipes')||'[]');allRecipes=[...BASE_RECIPES,...custom];}
+function setFilter(btn,type){document.querySelectorAll(`[data-filter][onclick*="${type}"]`).forEach(b=>b.classList.remove('active'));btn.classList.add('active');filters[type]=btn.dataset.filter;renderGrid();}
+function setTab(btn,tab){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentTab=tab;renderGrid();}
+function getFilteredRecipes(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const favs=JSON.parse(localStorage.getItem('favs')||'[]');
+  const custom=JSON.parse(localStorage.getItem('customRecipes')||'[]');
+  return allRecipes.filter(r=>{
+    if(currentTab==='favs'&&!favs.includes(r.id)) return false;
+    if(currentTab==='mine'&&!custom.find(c=>c.id===r.id)) return false;
+    if(filters.cuisine!=='all'&&r.cuisine!==filters.cuisine) return false;
+    if(filters.diff!=='all'&&r.diff!==filters.diff) return false;
+    if(q&&!r.title.toLowerCase().includes(q)&&!r.cuisine.toLowerCase().includes(q)) return false;
     return true;
   });
 }
-function diffTag(d) {
-  const map = { Easy:'easy', Medium:'medium', Hard:'hard' };
-  return `<span class="tag tag-${map[d]||'easy'}">${d}</span>`;
-}
-function getStars(id) {
-  const ratings = JSON.parse(localStorage.getItem('ratings') || '{}');
-  const arr = ratings[id] || [];
-  if (!arr.length) return { avg:0, count:0 };
-  return { avg:(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1), count:arr.length };
-}
-function renderGrid() {
-  const recipes = getFilteredRecipes();
-  const favs = JSON.parse(localStorage.getItem('favs') || '[]');
-  const grid = document.getElementById('recipeGrid');
-  document.getElementById('recipeCountLabel').textContent = `${recipes.length} recipe${recipes.length!==1?'s':''}`;
-  if (!recipes.length) {
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🔍</div><p>No recipes found.</p></div>`;
-    return;
-  }
-  grid.innerHTML = recipes.map(r => {
-    const isFav = favs.includes(r.id);
-    const { avg, count } = getStars(r.id);
-    return `
-      <div class="recipe-card" onclick="openDetail('${r.id}')">
-        <span class="card-emoji">${r.emoji}
-          <button class="fav-btn ${isFav?'active':''}" onclick="toggleFav(event,'${r.id}')">${isFav?'❤️':'🤍'}</button>
-        </span>
-        <div class="card-body">
-          <div class="card-tags"><span class="tag tag-cuisine">${r.cuisine}</span>${diffTag(r.diff)}</div>
-          <div class="card-title">${r.title}</div>
-          <div class="card-meta">
-            <span>⏱ ${r.time} min</span><span>👤 ${r.servings||2}</span>
-            ${count>0?`<span style="color:#f0a030">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))}</span>`:''}
-          </div>
-        </div>
-      </div>`;
+function diffTag(d){const map={Easy:'easy',Medium:'medium',Hard:'hard'};return`<span class="tag tag-${map[d]||'easy'}">${d}</span>`;}
+function getStars(id){const ratings=JSON.parse(localStorage.getItem('ratings')||'{}');const arr=ratings[id]||[];if(!arr.length) return{avg:0,count:0};return{avg:(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1),count:arr.length};}
+
+function trackView(id){const views=JSON.parse(localStorage.getItem('recipeViews')||'{}');views[id]=(views[id]||0)+1;localStorage.setItem('recipeViews',JSON.stringify(views));}
+
+function renderGrid(){
+  const recipes=getFilteredRecipes();
+  const favs=JSON.parse(localStorage.getItem('favs')||'[]');
+  const grid=document.getElementById('recipeGrid');
+  document.getElementById('recipeCountLabel').textContent=`${recipes.length} recipe${recipes.length!==1?'s':''}`;
+  if(!recipes.length){grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🔍</div><p>No recipes found.</p></div>`;return;}
+  grid.innerHTML=recipes.map(r=>{
+    const isFav=favs.includes(r.id);
+    const{avg,count}=getStars(r.id);
+    const n=estimateNutrition(r,r.servings);
+    const cc=getComments(r.id).length;
+    return`<div class="recipe-card" onclick="openDetail('${r.id}')">
+      <span class="card-emoji">${r.emoji}<button class="fav-btn ${isFav?'active':''}" onclick="handleFav(event,'${r.id}')">${isFav?'❤️':'🤍'}</button></span>
+      <div class="card-body">
+        <div class="card-tags"><span class="tag tag-cuisine">${r.cuisine}</span>${diffTag(r.diff)}</div>
+        <div class="card-title">${r.title}</div>
+        <div class="card-meta"><span>⏱ ${r.time}min</span><span>🔥 ${n.cal}cal</span>${count>0?`<span style="color:#f0a030">${'★'.repeat(Math.round(avg))}</span>`:''} ${cc>0?`<span>💬 ${cc}</span>`:''}</div>
+      </div>
+    </div>`;
   }).join('');
 }
-function toggleFav(e, id) {
+
+function handleFav(e,id){
   e.stopPropagation();
-  const favs = JSON.parse(localStorage.getItem('favs') || '[]');
-  const i = favs.indexOf(id);
-  if (i===-1) favs.push(id); else favs.splice(i,1);
-  localStorage.setItem('favs', JSON.stringify(favs));
+  if(!requireLogin(null,'Log in to save favourite recipes.')) return;
+  const favs=JSON.parse(localStorage.getItem('favs')||'[]');
+  const i=favs.indexOf(id);
+  if(i===-1) favs.push(id); else favs.splice(i,1);
+  localStorage.setItem('favs',JSON.stringify(favs));
   renderGrid();
 }
-function openDetail(id) {
-  currentRecipeId = id;
-  const r = allRecipes.find(x => x.id===id);
-  if (!r) return;
-  baseServings = r.servings||2;
-  currentServings = baseServings;
+
+function openDetail(id){
+  currentRecipeId=id;
+  const r=allRecipes.find(x=>x.id===id);
+  if(!r) return;
+  baseServings=r.servings||2;
+  currentServings=baseServings;
+  trackView(id);
   renderDetail(r);
   document.getElementById('detailPanel').classList.add('open');
 }
-function closeDetail() { document.getElementById('detailPanel').classList.remove('open'); currentRecipeId=null; }
-function renderDetail(r) {
-  const favs = JSON.parse(localStorage.getItem('favs') || '[]');
-  const isFav = favs.includes(r.id);
-  const userRating = getUserRating(r.id);
-  const { avg, count } = getStars(r.id);
-  const ratio = currentServings / baseServings;
-  document.getElementById('detailContent').innerHTML = `
+function closeDetail(){document.getElementById('detailPanel').classList.remove('open');currentRecipeId=null;}
+
+function renderDetail(r){
+  const favs=JSON.parse(localStorage.getItem('favs')||'[]');
+  const isFav=favs.includes(r.id);
+  const userRating=getUserRating(r.id);
+  const{avg,count}=getStars(r.id);
+  const ratio=currentServings/baseServings;
+  document.getElementById('detailContent').innerHTML=`
     <span class="detail-emoji">${r.emoji}</span>
     <div class="detail-title">${r.title}</div>
     <div class="detail-meta"><span>⏱ ${r.time} min</span><span>🍽 ${r.cuisine}</span>${diffTag(r.diff)}</div>
     <p style="color:var(--text2);font-size:0.9rem;margin-bottom:16px;line-height:1.6;">${r.desc||''}</p>
-    <button onclick="toggleFav(event,'${r.id}')" style="background:${isFav?'#ffe0e0':'var(--bg2)'};border:1px solid ${isFav?'#e04040':'var(--border)'};border-radius:10px;padding:7px 14px;cursor:pointer;font-size:0.85rem;color:${isFav?'#a02020':'var(--text2)'};">
-      ${isFav?'❤️ Saved':'🤍 Save Recipe'}
-    </button>
+    <button onclick="handleFav(event,'${r.id}')" style="background:${isFav?'#ffe0e0':'var(--bg2)'};border:1px solid ${isFav?'#e04040':'var(--border)'};border-radius:10px;padding:7px 14px;cursor:pointer;font-size:0.85rem;color:${isFav?'#a02020':'var(--text2)'};">${isFav?'❤️ Saved':'🤍 Save Recipe'}</button>
+    <hr class="divider">
+    ${nutritionHTML(r,currentServings)}
     <hr class="divider">
     <div class="rating-widget">
       <div class="section-label">⭐ Rate this Recipe</div>
-      <div class="rating-stars">${[1,2,3,4,5].map(n=>`<button class="star-btn" onclick="rateRecipe('${r.id}',${n})">${n<=userRating?'★':'☆'}</button>`).join('')}</div>
+      <div class="rating-stars">${[1,2,3,4,5].map(n=>`<button class="star-btn" onclick="handleRate('${r.id}',${n})">${n<=userRating?'★':'☆'}</button>`).join('')}</div>
       <div class="rating-avg">${count>0?`Average: ${avg}/5 from ${count} rating${count!==1?'s':''}`:' Be the first to rate!'}</div>
     </div>
     <hr class="divider">
-    <div class="scaler">
-      <label>🍽 Servings</label>
-      <div class="scaler-btns">
-        <button class="scaler-btn" onclick="changeServings(-1)">−</button>
-        <span id="servingNum">${currentServings}</span>
-        <button class="scaler-btn" onclick="changeServings(1)">+</button>
-      </div>
-    </div>
+    <div class="scaler"><label>🍽 Servings</label><div class="scaler-btns"><button class="scaler-btn" onclick="changeServings(-1)">−</button><span id="servingNum">${currentServings}</span><button class="scaler-btn" onclick="changeServings(1)">+</button></div></div>
     <div class="section-label">🛒 Ingredients</div>
-    <ul class="ing-list" id="ingList">
-      ${r.ingredients.map((ing,i)=>`
-        <li onclick="this.classList.toggle('checked')">
-          <div class="ing-check"></div>
-          <span class="ing-amt" data-base="${ing.amt}" data-index="${i}">${scaleAmount(ing.amt,ratio)}</span>
-          <span>${ing.name}</span>
-        </li>`).join('')}
-    </ul>
-    <div class="shop-bar">
-      <p>Add all to shopping list</p>
-      <button class="shop-btn" onclick="addToShopList('${r.id}')">+ Add to List</button>
-    </div>
+    <ul class="ing-list" id="ingList">${r.ingredients.map((ing,i)=>`<li onclick="this.classList.toggle('checked')"><div class="ing-check"></div><span class="ing-amt" data-base="${ing.amt}">${scaleAmount(ing.amt,ratio)}</span><span>${ing.name}</span></li>`).join('')}</ul>
+    <div class="shop-bar"><p>Add all to shopping list</p><button class="shop-btn" onclick="addToShopList('${r.id}')">+ Add to List</button></div>
     <hr class="divider">
     <div class="section-label">📋 Steps</div>
-    <ol class="step-list">
-      ${r.steps.map((s,i)=>`
-        <li class="step-item" onclick="this.classList.toggle('done')">
-          <div class="step-num">${i+1}</div>
-          <div class="step-text">${s}</div>
-        </li>`).join('')}
-    </ol>
-    <div class="timer-bar">
-      <span>⏱</span>
-      <span class="timer-display" id="timerDisplay">${r.time}:00</span>
-      <button onclick="startTimer(${r.time})" style="background:var(--accent);color:white;border-radius:8px;">Start</button>
-      <button onclick="stopTimer()" style="background:var(--border);color:var(--text);border-radius:8px;">Stop</button>
-    </div>
+    <ol class="step-list">${r.steps.map((s,i)=>`<li class="step-item" onclick="this.classList.toggle('done')"><div class="step-num">${i+1}</div><div class="step-text">${s}</div></li>`).join('')}</ol>
+    <div class="timer-bar"><span>⏱</span><span class="timer-display" id="timerDisplay">${r.time}:00</span><button onclick="startTimer(${r.time})" style="background:var(--accent);color:white;border-radius:8px;">Start</button><button onclick="stopTimer()" style="background:var(--border);color:var(--text);border-radius:8px;">Stop</button></div>
     ${r.fact?`<div style="background:var(--bg2);border-radius:12px;padding:14px 16px;margin-top:20px;font-size:0.85rem;color:var(--text2);font-style:italic;">💡 ${r.fact}</div>`:''}
+    <hr class="divider">
+    ${converterHTML()}
+    <hr class="divider">
+    ${similarHTML(r)}
+    <hr class="divider">
+    <div class="section-label">💬 Comments</div>
+    ${commentsHTML(r.id)}
   `;
 }
-function changeServings(delta) {
-  const r = allRecipes.find(x => x.id===currentRecipeId);
-  if (!r) return;
-  currentServings = Math.max(1, currentServings+delta);
-  document.getElementById('servingNum').textContent = currentServings;
-  const ratio = currentServings/baseServings;
-  document.querySelectorAll('.ing-amt').forEach(el => { el.textContent = scaleAmount(el.dataset.base, ratio); });
+
+function changeServings(delta){
+  const r=allRecipes.find(x=>x.id===currentRecipeId);if(!r) return;
+  currentServings=Math.max(1,currentServings+delta);
+  document.getElementById('servingNum').textContent=currentServings;
+  const ratio=currentServings/baseServings;
+  document.querySelectorAll('.ing-amt').forEach(el=>{el.textContent=scaleAmount(el.dataset.base,ratio);});
 }
-function scaleAmount(amt, ratio) {
-  if (ratio===1) return amt;
-  const match = amt.match(/^([\d.\/]+)\s*(.*)/);
-  if (!match) return amt;
-  let num = match[1].includes('/') ? eval(match[1]) : parseFloat(match[1]);
-  const scaled = Math.round(num*ratio*10)/10;
-  return scaled + (match[2] ? ' '+match[2] : '');
+function scaleAmount(amt,ratio){
+  if(ratio===1) return amt;
+  const match=amt.match(/^([\d.\/]+)\s*(.*)/);if(!match) return amt;
+  let num=match[1].includes('/')?eval(match[1]):parseFloat(match[1]);
+  return Math.round(num*ratio*10)/10+(match[2]?' '+match[2]:'');
 }
-function getUserRating(id) { return JSON.parse(localStorage.getItem('myRatings')||'{}')[id]||0; }
-function rateRecipe(id, val) {
-  const user = localStorage.getItem('username');
-  if (!user) { alert('Log in to rate recipes!'); return; }
-  const myRatings = JSON.parse(localStorage.getItem('myRatings')||'{}');
-  const ratings = JSON.parse(localStorage.getItem('ratings')||'{}');
-  const prev = myRatings[id]||0;
-  myRatings[id] = val;
-  if (!ratings[id]) ratings[id]=[];
-  if (prev) { const idx=ratings[id].indexOf(prev); if(idx>-1) ratings[id].splice(idx,1); }
+function getUserRating(id){return JSON.parse(localStorage.getItem('myRatings')||'{}')[id]||0;}
+function handleRate(id,val){
+  if(!requireLogin(null,'Log in to rate recipes.')) return;
+  const myRatings=JSON.parse(localStorage.getItem('myRatings')||'{}');
+  const ratings=JSON.parse(localStorage.getItem('ratings')||'{}');
+  const prev=myRatings[id]||0;
+  myRatings[id]=val;
+  if(!ratings[id]) ratings[id]=[];
+  if(prev){const idx=ratings[id].indexOf(prev);if(idx>-1) ratings[id].splice(idx,1);}
   ratings[id].push(val);
-  localStorage.setItem('myRatings', JSON.stringify(myRatings));
-  localStorage.setItem('ratings', JSON.stringify(ratings));
-  const r = allRecipes.find(x => x.id===id);
-  if (r) renderDetail(r);
-  renderGrid();
+  localStorage.setItem('myRatings',JSON.stringify(myRatings));
+  localStorage.setItem('ratings',JSON.stringify(ratings));
+  const r=allRecipes.find(x=>x.id===id);if(r) renderDetail(r);renderGrid();
 }
-function addToShopList(id) {
-  const r = allRecipes.find(x => x.id===id);
-  if (!r) return;
-  const shop = JSON.parse(localStorage.getItem('shopList')||'{}');
-  if (!shop[r.title]) shop[r.title]=[];
-  const ratio = currentServings/baseServings;
-  r.ingredients.forEach(ing => { const text=`${scaleAmount(ing.amt,ratio)} ${ing.name}`; if(!shop[r.title].includes(text)) shop[r.title].push(text); });
-  localStorage.setItem('shopList', JSON.stringify(shop));
+function addToShopList(id){
+  const r=allRecipes.find(x=>x.id===id);if(!r) return;
+  const shop=JSON.parse(localStorage.getItem('shopList')||'{}');
+  if(!shop[r.title]) shop[r.title]=[];
+  const ratio=currentServings/baseServings;
+  r.ingredients.forEach(ing=>{const t=`${scaleAmount(ing.amt,ratio)} ${ing.name}`;if(!shop[r.title].includes(t)) shop[r.title].push(t);});
+  localStorage.setItem('shopList',JSON.stringify(shop));
   alert(`✅ Added ${r.ingredients.length} ingredients to your shopping list!`);
 }
-function renderShopList() {
-  const shop = JSON.parse(localStorage.getItem('shopList')||'{}');
-  const content = document.getElementById('shopListContent');
-  const keys = Object.keys(shop);
-  if (!keys.length) { content.innerHTML='<p style="color:var(--text2);text-align:center;padding:20px 0;">Your list is empty. Open a recipe and click "+ Add to List".</p>'; return; }
-  content.innerHTML = keys.map(title=>`
-    <div class="shop-section-title">${title}</div>
-    <ul class="shop-list">${shop[title].map(item=>`<li>${item} <button onclick="removeShopItem('${title}','${item.replace(/'/g,"\\'")}')" title="Remove">×</button></li>`).join('')}</ul>
-  `).join('');
+function renderShopList(){
+  const shop=JSON.parse(localStorage.getItem('shopList')||'{}');
+  const content=document.getElementById('shopListContent');
+  const keys=Object.keys(shop);
+  if(!keys.length){content.innerHTML='<p style="color:var(--text2);text-align:center;padding:20px 0;">Your list is empty.</p>';return;}
+  content.innerHTML=keys.map(title=>`<div class="shop-section-title">${title}</div><ul class="shop-list">${shop[title].map(item=>`<li>${item}<button onclick="removeShopItem('${title}','${item.replace(/'/g,"\\'")}')">×</button></li>`).join('')}</ul>`).join('');
 }
-function removeShopItem(title, item) {
-  const shop = JSON.parse(localStorage.getItem('shopList')||'{}');
-  if (!shop[title]) return;
-  shop[title] = shop[title].filter(i=>i!==item);
-  if (!shop[title].length) delete shop[title];
-  localStorage.setItem('shopList', JSON.stringify(shop));
-  renderShopList();
+function removeShopItem(title,item){
+  const shop=JSON.parse(localStorage.getItem('shopList')||'{}');
+  if(!shop[title]) return;
+  shop[title]=shop[title].filter(i=>i!==item);
+  if(!shop[title].length) delete shop[title];
+  localStorage.setItem('shopList',JSON.stringify(shop));renderShopList();
 }
-function clearShopList() { if(confirm('Clear the entire shopping list?')) { localStorage.removeItem('shopList'); renderShopList(); } }
-function copyShopList() {
-  const shop = JSON.parse(localStorage.getItem('shopList')||'{}');
-  let text = '🛒 Shopping List\n\n';
-  Object.entries(shop).forEach(([title,items]) => { text+=`${title}:\n${items.map(i=>`  • ${i}`).join('\n')}\n\n`; });
-  navigator.clipboard.writeText(text).then(() => { document.getElementById('shopMsg').innerHTML='<div class="msg msg-success">Copied!</div>'; setTimeout(()=>document.getElementById('shopMsg').innerHTML='',2000); });
+function clearShopList(){if(confirm('Clear the entire shopping list?')){localStorage.removeItem('shopList');renderShopList();}}
+function copyShopList(){
+  const shop=JSON.parse(localStorage.getItem('shopList')||'{}');
+  let text='🛒 Shopping List\n\n';
+  Object.entries(shop).forEach(([t,items])=>{text+=`${t}:\n${items.map(i=>`  • ${i}`).join('\n')}\n\n`;});
+  navigator.clipboard.writeText(text).then(()=>{document.getElementById('shopMsg').innerHTML='<div class="msg msg-success">Copied!</div>';setTimeout(()=>document.getElementById('shopMsg').innerHTML='',2000);});
 }
 let timerInterval;
-function startTimer(min) {
-  clearInterval(timerInterval);
-  let secs = min*60;
-  const display = document.getElementById('timerDisplay');
-  timerInterval = setInterval(() => {
-    const m=Math.floor(secs/60), s=secs%60;
-    if(display) display.textContent=`${m}:${s<10?'0':''}${s}`;
-    secs--;
-    if(secs<0) { clearInterval(timerInterval); if(display) display.textContent='Done! ⏰'; alert('⏰ Timer done!'); }
-  }, 1000);
+function startTimer(min){
+  clearInterval(timerInterval);let secs=min*60;
+  const display=document.getElementById('timerDisplay');
+  timerInterval=setInterval(()=>{const m=Math.floor(secs/60),s=secs%60;if(display) display.textContent=`${m}:${s<10?'0':''}${s}`;secs--;if(secs<0){clearInterval(timerInterval);if(display) display.textContent='Done! ⏰';alert('⏰ Timer done!');}},1000);
 }
-function stopTimer() { clearInterval(timerInterval); }
-function submitRecipe() {
+function stopTimer(){clearInterval(timerInterval);}
+function submitRecipe(){
   const name=document.getElementById('rName').value.trim();
   const emoji=document.getElementById('rEmoji').value.trim()||'🍽️';
   const cuisine=document.getElementById('rCuisine').value;
@@ -536,22 +751,20 @@ function submitRecipe() {
   const stepsText=document.getElementById('rSteps').value.trim();
   const fact=document.getElementById('rFact').value.trim();
   const msg=document.getElementById('submitMsg');
-  if (!name||!ingText||!stepsText||!time) { msg.innerHTML='<div class="msg msg-error">Please fill in all required fields.</div>'; return; }
-  const ingredients=ingText.split('\n').filter(Boolean).map(line=>{ const m=line.match(/^([\d.\/]+\s*\w+)\s+(.+)/); return m?{amt:m[1],name:m[2]}:{amt:'',name:line}; });
+  if(!name||!ingText||!stepsText||!time){msg.innerHTML='<div class="msg msg-error">Please fill in all required fields.</div>';return;}
+  const ingredients=ingText.split('\n').filter(Boolean).map(line=>{const m=line.match(/^([\d.\/]+\s*\w+)\s+(.+)/);return m?{amt:m[1],name:m[2]}:{amt:'',name:line};});
   const steps=stepsText.split('\n').filter(Boolean);
-  const recipe={ id:'custom_'+Date.now(), emoji, title:name, cuisine, diff, time, servings, desc:`A custom recipe submitted by ${localStorage.getItem('username')||'a user'}.`, fact, ingredients, steps };
+  const recipe={id:'custom_'+Date.now(),emoji,title:name,cuisine,diff,time,servings,desc:`A custom recipe submitted by ${localStorage.getItem('username')||'a user'}.`,fact,ingredients,steps};
   const custom=JSON.parse(localStorage.getItem('customRecipes')||'[]');
-  custom.push(recipe);
-  localStorage.setItem('customRecipes', JSON.stringify(custom));
-  loadAllRecipes(); renderGrid();
+  custom.push(recipe);localStorage.setItem('customRecipes',JSON.stringify(custom));
+  loadAllRecipes();renderGrid();
   msg.innerHTML='<div class="msg msg-success">Recipe submitted! 🎉</div>';
-  setTimeout(()=>{ closeModal('submitModal'); msg.innerHTML=''; }, 1500);
+  setTimeout(()=>{closeModal('submitModal');msg.innerHTML='';},1500);
 }
-loadAllRecipes();
-renderGrid();
-const urlParams = new URLSearchParams(window.location.search);
-const openId = urlParams.get('r');
-if (openId) { setTimeout(()=>openDetail(openId), 300); }
+loadAllRecipes();renderGrid();
+const urlParams=new URLSearchParams(window.location.search);
+const openId=urlParams.get('r');
+if(openId){setTimeout(()=>openDetail(openId),300);}
 </script>
 </body>
 </html>
