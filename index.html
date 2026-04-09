@@ -3,311 +3,313 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Kitchen Hub</title>
+<title>Home – Kitchen Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#fdf6ee;--bg2:#fff8f0;--text:#1a1208;--text2:#5a4a3a;--accent:#c8440a;--accent2:#e07b39;--card:#ffffff;--border:#e8d8c4;--shadow:rgba(180,100,40,0.12); }
-  .dark { --bg:#16100a;--bg2:#1e160e;--text:#f5ede0;--text2:#b09070;--accent:#e8673a;--accent2:#f09050;--card:#221a10;--border:#3a2a1a;--shadow:rgba(0,0,0,0.4); }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:background 0.3s,color 0.3s;min-height:100vh;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:var(--bg);border-bottom:1px solid var(--border);}
-  .nav-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--accent);text-decoration:none;}
-  .nav-links{display:flex;gap:8px;align-items:center;}
-  .nav-links a{text-decoration:none;color:var(--text2);font-size:0.9rem;padding:6px 14px;border-radius:20px;transition:background 0.2s,color 0.2s;}
-  .nav-links a:hover{background:var(--border);color:var(--text);}
-  .nav-links a.active{background:var(--accent);color:white;}
-  .nav-right{display:flex;gap:8px;align-items:center;}
-  .btn{display:inline-block;padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.875rem;font-weight:500;transition:all 0.2s;}
-  .btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);}
-  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
-  .btn-primary{background:var(--accent);color:white;border:none;}
-  .btn-primary:hover{background:var(--accent2);transform:translateY(-1px);}
-  .btn-sm{padding:6px 14px;font-size:0.8rem;}
-  #darkBtn{background:var(--border);color:var(--text);border:none;border-radius:20px;padding:6px 14px;cursor:pointer;font-size:0.85rem;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
-  #darkBtn:hover{background:var(--accent);color:white;}
-  #userChip{display:none;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:4px 14px 4px 8px;font-size:0.85rem;}
-  #userChip .avatar{width:26px;height:26px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;}
-  #logoutBtn{background:none;border:none;color:var(--text2);cursor:pointer;font-size:0.75rem;margin-left:4px;}
-  .hero{padding:140px 32px 80px;text-align:center;max-width:700px;margin:0 auto;}
-  .hero-tag{display:inline-block;background:var(--accent);color:white;padding:4px 14px;border-radius:20px;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px;}
-  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,4rem);line-height:1.1;margin-bottom:20px;}
-  .hero h1 em{color:var(--accent);font-style:italic;}
-  .hero p{font-size:1.1rem;color:var(--text2);margin-bottom:36px;line-height:1.7;}
-  .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-  .stats{display:flex;justify-content:center;gap:48px;padding:32px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);flex-wrap:wrap;}
-  .stat{text-align:center;}
-  .stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--accent);}
-  .stat-label{font-size:0.8rem;color:var(--text2);margin-top:2px;}
-  .section{padding:64px 32px;max-width:1100px;margin:0 auto;}
-  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
-  .section-title{font-family:'Playfair Display',serif;font-size:1.8rem;}
-  .recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
-  .recipe-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;}
-  .recipe-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px var(--shadow);}
-  .card-emoji{font-size:3rem;background:var(--bg2);display:block;text-align:center;padding:24px 0;position:relative;}
-  .card-body{padding:16px 20px 20px;}
-  .card-tags{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
-  .tag{font-size:0.7rem;padding:3px 10px;border-radius:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;}
-  .tag-cuisine{background:#fde8d8;color:#c8440a;}
-  .dark .tag-cuisine{background:#3a1a08;color:#e8673a;}
-  .tag-easy{background:#d8f5e8;color:#1a7a40;}
-  .dark .tag-easy{background:#0a2a18;color:#4aaa70;}
-  .tag-medium{background:#fff3d8;color:#a07000;}
-  .dark .tag-medium{background:#2a1e00;color:#d4aa40;}
-  .tag-hard{background:#fde0e0;color:#a02020;}
-  .dark .tag-hard{background:#2a0808;color:#e05050;}
-  .card-title{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:6px;}
-  .card-meta{font-size:0.8rem;color:var(--text2);display:flex;gap:12px;flex-wrap:wrap;}
-  .trending-badge{position:absolute;top:10px;left:12px;background:#e8400a;color:white;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:0.05em;}
-  /* ABOUT */
-  .about-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-  .about-inner{max-width:1100px;margin:0 auto;padding:64px 32px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
-  .about-text h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:20px;}
-  .about-text h2 em{color:var(--accent);font-style:italic;}
-  .about-text p{color:var(--text2);line-height:1.8;margin-bottom:16px;font-size:0.95rem;}
-  .about-features{list-style:none;display:flex;flex-direction:column;gap:12px;}
-  .about-features li{display:flex;align-items:center;gap:12px;font-size:0.9rem;color:var(--text2);}
-  .about-features li .icon{width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-  @media(max-width:700px){.about-inner{grid-template-columns:1fr;gap:32px;}}
-  /* MODAL */
-  .modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;}
-  .modal-overlay.open{display:flex;}
-  .modal{background:var(--card);border-radius:20px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:36px;position:relative;}
-  .modal-close{position:absolute;top:16px;right:16px;background:var(--border);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:var(--text);display:flex;align-items:center;justify-content:center;}
-  .modal h2{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:8px;}
-  .modal p{color:var(--text2);margin-bottom:20px;font-size:0.9rem;}
-  .form-group{margin-bottom:16px;}
-  .form-group label{display:block;font-size:0.85rem;font-weight:500;margin-bottom:6px;color:var(--text2);}
-  .form-group input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;}
-  .form-group input:focus{outline:none;border-color:var(--accent);}
-  .modal-actions{display:flex;gap:10px;margin-top:8px;}
-  .msg{font-size:0.85rem;padding:10px 14px;border-radius:10px;margin-top:12px;}
-  .msg-success{background:#d8f5e8;color:#1a7a40;}
-  .dark .msg-success{background:#0a2a18;color:#4aaa70;}
-  .msg-error{background:#fde0e0;color:#a02020;}
-  /* FOOTER */
-  footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 32px 32px;}
-  .footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:40px;}
-  .footer-brand p{color:var(--text2);font-size:0.875rem;line-height:1.7;margin-top:10px;max-width:300px;}
-  .footer-col h4{font-weight:600;font-size:0.875rem;margin-bottom:14px;}
-  .footer-col a{display:block;color:var(--text2);text-decoration:none;font-size:0.85rem;margin-bottom:8px;transition:color 0.2s;}
-  .footer-col a:hover{color:var(--accent);}
-  .footer-bottom{border-top:1px solid var(--border);padding-top:24px;text-align:center;font-size:0.8rem;color:var(--text2);}
-  @media(max-width:600px){.footer-inner{grid-template-columns:1fr;}}
+:root{--bg:#fdf6ee;--bg2:#fff8f0;--text:#1a1208;--text2:#5a4a3a;--accent:#c8440a;--accent2:#e07b39;--card:#fff;--border:#e8d8c4;--shadow:rgba(180,100,40,.12);}
+.dark{--bg:#16100a;--bg2:#1e160e;--text:#f5ede0;--text2:#b09070;--accent:#e8673a;--accent2:#f09050;--card:#221a10;--border:#3a2a1a;--shadow:rgba(0,0,0,.4);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:64px;background:var(--bg);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--accent);text-decoration:none;}
+.nav-links{display:flex;gap:2px;align-items:center;flex-wrap:wrap;}
+.nav-links a{text-decoration:none;color:var(--text2);font-size:.8rem;padding:5px 9px;border-radius:20px;transition:background .2s,color .2s;}
+.nav-links a:hover{background:var(--border);color:var(--text);}
+.nav-links a.active{background:var(--accent);color:#fff;}
+.nav-right{display:flex;gap:6px;align-items:center;}
+.btn{display:inline-flex;align-items:center;padding:7px 16px;border-radius:20px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;transition:all .2s;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent2);}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-sm{padding:5px 12px;font-size:.78rem;}
+#darkBtn{background:var(--border);color:var(--text);border:none;border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.82rem;font-family:'DM Sans',sans-serif;}
+#darkBtn:hover{background:var(--accent);color:#fff;}
+#userChip{display:none;align-items:center;gap:7px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px 12px 3px 7px;font-size:.82rem;}
+#userChip .av{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;}
+#logoutBtn{background:none;border:none;color:var(--text2);cursor:pointer;font-size:.72rem;margin-left:3px;}
+/* HERO */
+.hero{padding:130px 32px 70px;text-align:center;max-width:680px;margin:0 auto;}
+.hero-tag{display:inline-block;background:var(--accent);color:#fff;padding:3px 13px;border-radius:20px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5.5vw,3.8rem);line-height:1.1;margin-bottom:16px;}
+.hero h1 em{color:var(--accent);font-style:italic;}
+.hero p{font-size:1rem;color:var(--text2);margin-bottom:30px;line-height:1.7;}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+/* STATS */
+.stats{display:flex;justify-content:center;gap:32px;padding:24px 32px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--accent);}
+.stat-label{font-size:.75rem;color:var(--text2);margin-top:2px;}
+/* SECTIONS */
+.section{padding:52px 32px;max-width:1100px;margin:0 auto;}
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:1.65rem;}
+/* CARDS */
+.recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;}
+.recipe-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:pointer;}
+.recipe-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px var(--shadow);}
+.card-emo{font-size:2.8rem;background:var(--bg2);display:block;text-align:center;padding:22px 0;position:relative;}
+.card-body{padding:13px 16px 16px;}
+.card-tags{display:flex;gap:5px;margin-bottom:7px;flex-wrap:wrap;}
+.tag{font-size:.65rem;padding:2px 8px;border-radius:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+.tag-cuisine{background:#fde8d8;color:#c8440a;}
+.dark .tag-cuisine{background:#3a1a08;color:#e8673a;}
+.tag-easy{background:#d8f5e8;color:#1a7a40;}
+.dark .tag-easy{background:#0a2a18;color:#4aaa70;}
+.tag-medium{background:#fff3d8;color:#a07000;}
+.dark .tag-medium{background:#2a1e00;color:#d4aa40;}
+.tag-hard{background:#fde0e0;color:#a02020;}
+.dark .tag-hard{background:#2a0808;color:#e05050;}
+.card-title{font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:5px;}
+.card-meta{font-size:.75rem;color:var(--text2);display:flex;gap:9px;flex-wrap:wrap;}
+.trend-badge{position:absolute;top:8px;left:10px;background:#e8400a;color:#fff;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:9px;text-transform:uppercase;}
+/* MOST REVIEWED */
+.rev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
+.rev-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:all .2s;}
+.rev-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px var(--shadow);}
+.rev-rank{font-family:'Playfair Display',serif;font-size:2rem;color:var(--border);font-weight:900;min-width:30px;}
+.rev-emo{font-size:1.9rem;}
+.rev-info .rev-title{font-family:'Playfair Display',serif;font-size:.98rem;margin-bottom:3px;}
+.rev-info .rev-meta{font-size:.75rem;color:var(--text2);display:flex;gap:8px;}
+/* ABOUT */
+.about-sec{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.about-inner{max-width:1100px;margin:0 auto;padding:56px 32px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+.about-text h2{font-family:'Playfair Display',serif;font-size:1.85rem;margin-bottom:16px;}
+.about-text h2 em{color:var(--accent);font-style:italic;}
+.about-text p{color:var(--text2);line-height:1.8;margin-bottom:13px;font-size:.92rem;}
+.feat-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.feat-list li{display:flex;align-items:center;gap:11px;font-size:.87rem;color:var(--text2);}
+.feat-list li .icon{width:33px;height:33px;border-radius:9px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+@media(max-width:680px){.about-inner{grid-template-columns:1fr;gap:28px;}}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border-radius:20px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;position:relative;}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--border);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.9rem;color:var(--text);}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:6px;}
+.modal p{color:var(--text2);margin-bottom:18px;font-size:.88rem;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:.82rem;font-weight:500;margin-bottom:5px;color:var(--text2);}
+.fg input{width:100%;padding:9px 13px;border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;}
+.fg input:focus{outline:none;border-color:var(--accent);}
+.modal-actions{display:flex;gap:9px;margin-top:6px;}
+.msg{font-size:.82rem;padding:9px 13px;border-radius:9px;margin-top:10px;}
+.msg-ok{background:#d8f5e8;color:#1a7a40;}
+.msg-err{background:#fde0e0;color:#a02020;}
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 32px 24px;}
+.ft-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px;margin-bottom:28px;}
+.ft-brand p{color:var(--text2);font-size:.83rem;line-height:1.7;margin-top:9px;max-width:260px;}
+.ft-col h4{font-weight:600;font-size:.83rem;margin-bottom:11px;}
+.ft-col a{display:block;color:var(--text2);text-decoration:none;font-size:.8rem;margin-bottom:6px;transition:color .2s;}
+.ft-col a:hover{color:var(--accent);}
+.ft-bottom{border-top:1px solid var(--border);padding-top:18px;text-align:center;font-size:.75rem;color:var(--text2);}
+@media(max-width:680px){.ft-inner{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
-
 <nav>
   <a class="nav-logo" href="index.html">🍴 Kitchen Hub</a>
   <div class="nav-links">
     <a href="index.html" class="active">Home</a>
     <a href="kitchen.html">Recipes</a>
-    <a href="planner.html">Meal Planner</a>
+    <a href="seasonal.html">Seasonal</a>
+    <a href="tips.html">Tips</a>
+    <a href="community.html">Community</a>
+    <a href="planner.html">Planner</a>
     <a href="reviews.html">Reviews</a>
   </div>
   <div class="nav-right">
     <button id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
-    <div id="userChip">
-      <div class="avatar" id="avatarLetter">J</div>
-      <span id="chipName">User</span>
-      <button id="logoutBtn" onclick="logout()">✕</button>
-    </div>
-    <button class="btn btn-ghost btn-sm" id="loginNavBtn" onclick="openModal('loginModal')">Log In</button>
-    <button class="btn btn-primary btn-sm" id="signupNavBtn" onclick="openModal('signupModal')">Sign Up</button>
+    <div id="userChip"><div class="av" id="avLetter">J</div><span id="chipName">User</span><button id="logoutBtn" onclick="logout()">✕</button></div>
+    <button class="btn btn-ghost btn-sm" id="loginBtn" onclick="openM('loginModal')">Log In</button>
+    <button class="btn btn-primary btn-sm" id="signupBtn" onclick="openM('signupModal')">Sign Up</button>
   </div>
 </nav>
 
 <div class="hero">
   <span class="hero-tag">✨ Your Home Cooking Companion</span>
   <h1>Cook <em>something</em><br>delicious today</h1>
-  <p>Step-by-step recipes, shopping lists, meal planning, and more — all in one place, completely free.</p>
+  <p>Recipes, seasonal picks, meal planning, tips and a community of home cooks — all free.</p>
   <div class="hero-btns">
-    <a href="kitchen.html"><button class="btn btn-primary" style="padding:12px 28px;font-size:1rem;">Browse Recipes →</button></a>
-    <a href="planner.html"><button class="btn btn-ghost" style="padding:12px 28px;font-size:1rem;">Meal Planner</button></a>
+    <a href="kitchen.html"><button class="btn btn-primary" style="padding:11px 26px;font-size:.95rem;">Browse Recipes →</button></a>
+    <a href="seasonal.html"><button class="btn btn-ghost" style="padding:11px 26px;font-size:.95rem;">🍂 Seasonal</button></a>
+    <a href="community.html"><button class="btn btn-ghost" style="padding:11px 26px;font-size:.95rem;">👥 Community</button></a>
   </div>
 </div>
 
 <div class="stats">
-  <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Recipes</div></div>
-  <div class="stat"><div class="stat-num">3</div><div class="stat-label">Cuisines</div></div>
-  <div class="stat"><div class="stat-num" id="favCount">0</div><div class="stat-label">Your Favourites</div></div>
-  <div class="stat"><div class="stat-num" id="reviewCount">0</div><div class="stat-label">Community Reviews</div></div>
+  <div class="stat"><div class="stat-num" id="recStat">25+</div><div class="stat-label">Recipes</div></div>
+  <div class="stat"><div class="stat-num">4</div><div class="stat-label">Cuisines</div></div>
+  <div class="stat"><div class="stat-num" id="favStat">0</div><div class="stat-label">Your Favourites</div></div>
+  <div class="stat"><div class="stat-num" id="revStat">0</div><div class="stat-label">Reviews</div></div>
+  <div class="stat"><div class="stat-num" id="comStat">0</div><div class="stat-label">Community Dishes</div></div>
 </div>
 
 <div class="section">
-  <div class="section-header">
-    <h2 class="section-title">🔥 Trending Now</h2>
-    <a href="kitchen.html"><button class="btn btn-ghost btn-sm">See all →</button></a>
-  </div>
-  <div class="recipe-grid" id="trendingGrid"></div>
+  <div class="sec-header"><h2 class="sec-title">🔥 Trending Now</h2><a href="kitchen.html"><button class="btn btn-ghost btn-sm">See all →</button></a></div>
+  <div class="recipe-grid" id="trendGrid"></div>
 </div>
 
-<div class="section" style="padding-top:0;">
-  <div class="section-header">
-    <h2 class="section-title">⭐ Featured Recipes</h2>
-    <a href="kitchen.html"><button class="btn btn-ghost btn-sm">See all →</button></a>
-  </div>
-  <div class="recipe-grid" id="featuredGrid"></div>
+<div class="section" style="padding-top:0">
+  <div class="sec-header"><h2 class="sec-title">💬 Most Reviewed</h2><a href="reviews.html"><button class="btn btn-ghost btn-sm">All reviews →</button></a></div>
+  <div class="rev-grid" id="revGrid"></div>
 </div>
 
-<div class="about-section">
+<div class="section" style="padding-top:0">
+  <div class="sec-header"><h2 class="sec-title">⭐ Featured Recipes</h2><a href="kitchen.html"><button class="btn btn-ghost btn-sm">See all →</button></a></div>
+  <div class="recipe-grid" id="featGrid"></div>
+</div>
+
+<div class="about-sec">
   <div class="about-inner">
     <div class="about-text">
       <h2>Cooking made <em>simple</em><br>for everyone</h2>
-      <p>Kitchen Hub started as a simple idea — a place where anyone can find a great recipe, follow it step by step, and actually enjoy cooking at home.</p>
-      <p>Every recipe has been written with real home cooks in mind — clear instructions, honest timings, and ingredients you can actually find. Whether you're a complete beginner or a confident cook, Kitchen Hub has something for you.</p>
+      <p>Kitchen Hub is a place where anyone can find a great recipe, follow it step by step, and actually enjoy cooking at home.</p>
+      <p>Every recipe is written with real home cooks in mind — clear instructions, honest timings, and ingredients you can actually find.</p>
     </div>
-    <ul class="about-features">
-      <li><span class="icon">🍳</span> 12+ hand-picked recipes across 3 cuisines</li>
+    <ul class="feat-list">
+      <li><span class="icon">🍳</span> 25+ recipes across Italian, American, Baking & Asian</li>
+      <li><span class="icon">⚠️</span> Auto allergen badges on every single recipe</li>
+      <li><span class="icon">🍂</span> Seasonal recipe collections for every season</li>
+      <li><span class="icon">💡</span> 16 Tips & Tricks from real cooking experience</li>
+      <li><span class="icon">👥</span> Community dish sharing with allergen detection</li>
       <li><span class="icon">📅</span> Weekly meal planner with shopping list</li>
       <li><span class="icon">⚖️</span> Servings scaler and nutrition estimates</li>
-      <li><span class="icon">⏱</span> Built-in cook timers per recipe</li>
-      <li><span class="icon">❤️</span> Save your favourite recipes</li>
-      <li><span class="icon">✍️</span> Submit and share your own recipes</li>
-      <li><span class="icon">💬</span> Leave reviews and comments</li>
-      <li><span class="icon">🌙</span> Dark mode for late-night cooking</li>
+      <li><span class="icon">🌙</span> Dark mode for late-night cooking sessions</li>
     </ul>
   </div>
 </div>
 
+<!-- LOGIN MODAL -->
 <div class="modal-overlay" id="loginModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
-    <h2>Welcome back</h2>
-    <p>Log in to save favourites, rate, and review recipes.</p>
-    <div class="form-group"><label>Username</label><input id="liUser" placeholder="Your username"></div>
-    <div class="form-group"><label>Password</label><input id="liPass" type="password" placeholder="Your password"></div>
+    <button class="modal-close" onclick="closeM('loginModal')">✕</button>
+    <h2>Welcome back</h2><p>Log in to save favourites, rate, and review recipes.</p>
+    <div class="fg"><label>Username</label><input id="liU" placeholder="Your username"></div>
+    <div class="fg"><label>Password</label><input id="liP" type="password" placeholder="Your password"></div>
     <div class="modal-actions">
       <button class="btn btn-primary" onclick="login()" style="flex:1">Log In</button>
-      <button class="btn btn-ghost" onclick="closeModal('loginModal');openModal('signupModal')">Sign Up</button>
+      <button class="btn btn-ghost" onclick="closeM('loginModal');openM('signupModal')">Sign Up</button>
     </div>
-    <div id="loginMsg"></div>
+    <div id="liMsg"></div>
   </div>
 </div>
-
+<!-- SIGNUP MODAL -->
 <div class="modal-overlay" id="signupModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('signupModal')">✕</button>
-    <h2>Create account</h2>
-    <p>Join to save favourites, rate recipes, and plan meals.</p>
-    <div class="form-group"><label>Username</label><input id="suUser" placeholder="Choose a username"></div>
-    <div class="form-group"><label>Password</label><input id="suPass" type="password" placeholder="Choose a password"></div>
+    <button class="modal-close" onclick="closeM('signupModal')">✕</button>
+    <h2>Create account</h2><p>Join to save favourites, rate recipes, and plan meals.</p>
+    <div class="fg"><label>Username</label><input id="suU" placeholder="Choose a username"></div>
+    <div class="fg"><label>Password</label><input id="suP" type="password" placeholder="Choose a password"></div>
     <div class="modal-actions">
-      <button class="btn btn-primary" onclick="createAccount()" style="flex:1">Create Account</button>
-      <button class="btn btn-ghost" onclick="closeModal('signupModal');openModal('loginModal')">Log In</button>
+      <button class="btn btn-primary" onclick="createAcc()" style="flex:1">Create Account</button>
+      <button class="btn btn-ghost" onclick="closeM('signupModal');openM('loginModal')">Log In</button>
     </div>
-    <div id="signupMsg"></div>
+    <div id="suMsg"></div>
   </div>
 </div>
 
 <footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--accent);">🍴 Kitchen Hub</div>
-      <p>Simple, delicious recipes for real home cooks. No fluff — just great food.</p>
-    </div>
-    <div class="footer-col">
-      <h4>Explore</h4>
-      <a href="kitchen.html">All Recipes</a>
-      <a href="planner.html">Meal Planner</a>
-      <a href="reviews.html">Community Reviews</a>
-    </div>
-    <div class="footer-col">
-      <h4>Account</h4>
-      <a href="#" onclick="openModal('loginModal');return false;">Log In</a>
-      <a href="#" onclick="openModal('signupModal');return false;">Sign Up</a>
-    </div>
+  <div class="ft-inner">
+    <div class="ft-brand"><div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--accent);">🍴 Kitchen Hub</div><p>Simple, delicious recipes for real home cooks.</p></div>
+    <div class="ft-col"><h4>Recipes</h4><a href="kitchen.html">All Recipes</a><a href="seasonal.html">Seasonal</a><a href="tips.html">Tips & Tricks</a></div>
+    <div class="ft-col"><h4>Community</h4><a href="community.html">Share a Dish</a><a href="reviews.html">Reviews</a><a href="planner.html">Meal Planner</a></div>
+    <div class="ft-col"><h4>Account</h4><a href="#" onclick="openM('loginModal');return false">Log In</a><a href="#" onclick="openM('signupModal');return false">Sign Up</a></div>
   </div>
-  <div class="footer-bottom">© 2025 Kitchen Hub · Made with ❤️ for home cooks everywhere</div>
+  <div class="ft-bottom">© 2025 Kitchen Hub · Made with ❤️ for home cooks everywhere</div>
 </footer>
 
+<script src="recipes.js"></script>
 <script>
 function toggleDark(){const d=document.body.classList.toggle('dark');localStorage.setItem('dark',d);document.getElementById('darkBtn').textContent=d?'☀️ Light':'🌙 Dark';}
 if(localStorage.getItem('dark')==='true'){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️ Light';}
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
-function updateAuthUI(){
-  const user=localStorage.getItem('username');
-  const chip=document.getElementById('userChip');
-  const lb=document.getElementById('loginNavBtn');
-  const sb=document.getElementById('signupNavBtn');
-  if(user){chip.style.display='flex';document.getElementById('avatarLetter').textContent=user[0].toUpperCase();document.getElementById('chipName').textContent=user;lb.style.display='none';sb.style.display='none';}
+function authUI(){
+  const u=localStorage.getItem('username');
+  const chip=document.getElementById('userChip'),lb=document.getElementById('loginBtn'),sb=document.getElementById('signupBtn');
+  if(u){chip.style.display='flex';document.getElementById('avLetter').textContent=u[0].toUpperCase();document.getElementById('chipName').textContent=u;lb.style.display='none';sb.style.display='none';}
   else{chip.style.display='none';lb.style.display='';sb.style.display='';}
 }
-function createAccount(){
-  const u=document.getElementById('suUser').value.trim();
-  const p=document.getElementById('suPass').value;
-  const msg=document.getElementById('signupMsg');
-  if(!u||!p){msg.innerHTML='<div class="msg msg-error">Please fill all fields.</div>';return;}
+function createAcc(){
+  const u=document.getElementById('suU').value.trim(),p=document.getElementById('suP').value,msg=document.getElementById('suMsg');
+  if(!u||!p){msg.innerHTML='<div class="msg msg-err">Please fill all fields.</div>';return;}
   localStorage.setItem('username',u);localStorage.setItem('password',p);
-  msg.innerHTML='<div class="msg msg-success">Account created!</div>';
-  setTimeout(()=>{closeModal('signupModal');updateAuthUI();msg.innerHTML='';},1200);
+  msg.innerHTML='<div class="msg msg-ok">Account created!</div>';
+  setTimeout(()=>{closeM('signupModal');authUI();msg.innerHTML='';},1200);
 }
 function login(){
-  const u=document.getElementById('liUser').value.trim();
-  const p=document.getElementById('liPass').value;
-  const msg=document.getElementById('loginMsg');
+  const u=document.getElementById('liU').value.trim(),p=document.getElementById('liP').value,msg=document.getElementById('liMsg');
   if(u===localStorage.getItem('username')&&p===localStorage.getItem('password')){
-    msg.innerHTML='<div class="msg msg-success">Welcome back, '+u+'!</div>';
-    setTimeout(()=>{closeModal('loginModal');updateAuthUI();msg.innerHTML='';},1000);
-  }else{msg.innerHTML='<div class="msg msg-error">Wrong username or password.</div>';}
+    msg.innerHTML='<div class="msg msg-ok">Welcome back, '+u+'!</div>';
+    setTimeout(()=>{closeM('loginModal');authUI();msg.innerHTML='';},1000);
+  }else msg.innerHTML='<div class="msg msg-err">Wrong username or password.</div>';
 }
-function logout(){updateAuthUI();}
-updateAuthUI();
+function logout(){authUI();}
+authUI();
 
-const RECIPES=[
-  {id:'carbonara',emoji:'🍝',title:'Spaghetti Carbonara',cuisine:'Italian',diff:'Medium',time:25},
-  {id:'bolognese',emoji:'🍝',title:'Bolognese',cuisine:'Italian',diff:'Easy',time:60},
-  {id:'pesto',emoji:'🌿',title:'Pesto Pasta',cuisine:'Italian',diff:'Easy',time:15},
-  {id:'lasagna',emoji:'🫕',title:'Classic Lasagna',cuisine:'Italian',diff:'Hard',time:90},
-  {id:'burger',emoji:'🍔',title:'Classic Smash Burger',cuisine:'American',diff:'Easy',time:20},
-  {id:'mac',emoji:'🧀',title:'Baked Mac & Cheese',cuisine:'American',diff:'Medium',time:45},
-  {id:'ribs',emoji:'🥩',title:'BBQ Baby Back Ribs',cuisine:'American',diff:'Hard',time:180},
-  {id:'chicken',emoji:'🍗',title:'Garlic Butter Chicken Rice',cuisine:'American',diff:'Easy',time:40},
-  {id:'cake',emoji:'🍰',title:'Chocolate Fudge Cake',cuisine:'Baking',diff:'Medium',time:60},
-  {id:'cookies',emoji:'🍪',title:'Brown Butter Cookies',cuisine:'Baking',diff:'Easy',time:30},
-  {id:'banana_bread',emoji:'🍌',title:'Banana Bread',cuisine:'Baking',diff:'Easy',time:70},
-  {id:'cheesecake',emoji:'🎂',title:'New York Cheesecake',cuisine:'Baking',diff:'Hard',time:90},
-];
-function diffTag(d){const map={Easy:'easy',Medium:'medium',Hard:'hard'};return `<span class="tag tag-${map[d]||'easy'}">${d}</span>`;}
-function getTrending(){
-  const views=JSON.parse(localStorage.getItem('recipeViews')||'{}');
-  const defaults={carbonara:42,burger:38,cake:35,cookies:31,chicken:28,bolognese:24};
-  const merged={...defaults,...views};
-  return RECIPES.map(r=>({...r,views:merged[r.id]||0})).sort((a,b)=>b.views-a.views).slice(0,4);
-}
+function diffTag(d){const m={Easy:'easy',Medium:'medium',Hard:'hard'};return`<span class="tag tag-${m[d]||'easy'}">${d}</span>`;}
+
 function renderTrending(){
-  document.getElementById('trendingGrid').innerHTML=getTrending().map((r,i)=>`
-    <div class="recipe-card" onclick="window.location.href='kitchen.html?r=${r.id}'">
-      <span class="card-emoji">${r.emoji}<span class="trending-badge">#${i+1} Trending</span></span>
+  const views=JSON.parse(localStorage.getItem('recipeViews')||'{}');
+  const def={carbonara:42,burger:38,ramen:35,teriyaki:31,cake:28,cookies:25,chicken:22,pad_thai:19};
+  const merged={...def,...views};
+  const top=ALL_RECIPES.map(r=>({...r,v:merged[r.id]||0})).sort((a,b)=>b.v-a.v).slice(0,4);
+  document.getElementById('trendGrid').innerHTML=top.map((r,i)=>`
+    <div class="recipe-card" onclick="location.href='kitchen.html?r=${r.id}'">
+      <span class="card-emo">${r.emoji}<span class="trend-badge">#${i+1} Trending</span></span>
       <div class="card-body">
         <div class="card-tags"><span class="tag tag-cuisine">${r.cuisine}</span>${diffTag(r.diff)}</div>
         <div class="card-title">${r.title}</div>
-        <div class="card-meta"><span>⏱ ${r.time} min</span><span>👁 ${r.views} views</span></div>
+        <div class="card-meta"><span>⏱ ${r.time}min</span><span>👁 ${r.v}</span></div>
       </div>
     </div>`).join('');
 }
+
+function renderMostReviewed(){
+  const data=ALL_RECIPES.map(r=>{
+    const revs=JSON.parse(localStorage.getItem('reviews_'+r.id)||'[]');
+    const rats=JSON.parse(localStorage.getItem('ratings')||'{}');
+    const arr=rats[r.id]||[];
+    return{...r,rc:revs.length,avg:arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1):null};
+  }).sort((a,b)=>b.rc-a.rc).slice(0,4);
+  const hasAny=data.some(r=>r.rc>0);
+  const show=hasAny?data:['carbonara','burger','ramen','teriyaki'].map(id=>({...ALL_RECIPES.find(r=>r.id===id),rc:0,avg:null}));
+  document.getElementById('revGrid').innerHTML=show.map((r,i)=>`
+    <div class="rev-card" onclick="location.href='kitchen.html?r=${r.id}'">
+      <div class="rev-rank">${i+1}</div>
+      <div class="rev-emo">${r.emoji}</div>
+      <div class="rev-info">
+        <div class="rev-title">${r.title}</div>
+        <div class="rev-meta"><span>${r.cuisine}</span>${r.avg?`<span>⭐${r.avg}</span>`:''}<span>💬${r.rc}</span></div>
+      </div>
+    </div>`).join('');
+}
+
 function renderFeatured(){
   const favs=JSON.parse(localStorage.getItem('favs')||'[]');
-  document.getElementById('favCount').textContent=favs.length;
-  let totalReviews=0;
-  RECIPES.forEach(r=>{totalReviews+=JSON.parse(localStorage.getItem('reviews_'+r.id)||'[]').length;});
-  document.getElementById('reviewCount').textContent=totalReviews;
-  const featured=['carbonara','burger','cake','chicken'].map(id=>RECIPES.find(r=>r.id===id));
-  document.getElementById('featuredGrid').innerHTML=featured.map(r=>`
-    <div class="recipe-card" onclick="window.location.href='kitchen.html?r=${r.id}'">
-      <span class="card-emoji">${r.emoji}</span>
+  document.getElementById('favStat').textContent=favs.length;
+  let tot=0;ALL_RECIPES.forEach(r=>{tot+=JSON.parse(localStorage.getItem('reviews_'+r.id)||'[]').length;});
+  document.getElementById('revStat').textContent=tot;
+  document.getElementById('comStat').textContent=JSON.parse(localStorage.getItem('communityDishes')||'[]').length;
+  const custom=JSON.parse(localStorage.getItem('customRecipes')||'[]');
+  document.getElementById('recStat').textContent=(ALL_RECIPES.length+custom.length)+'+';
+  ['carbonara','burger','ramen','teriyaki'].map(id=>ALL_RECIPES.find(r=>r.id===id)).forEach(r=>{});
+  document.getElementById('featGrid').innerHTML=['carbonara','burger','ramen','teriyaki'].map(id=>{
+    const r=ALL_RECIPES.find(x=>x.id===id);
+    return`<div class="recipe-card" onclick="location.href='kitchen.html?r=${r.id}'">
+      <span class="card-emo">${r.emoji}</span>
       <div class="card-body">
         <div class="card-tags"><span class="tag tag-cuisine">${r.cuisine}</span>${diffTag(r.diff)}</div>
         <div class="card-title">${r.title}</div>
-        <div class="card-meta"><span>⏱ ${r.time} min</span>${favs.includes(r.id)?'<span>❤️ Saved</span>':''}</div>
+        <div class="card-meta"><span>⏱ ${r.time}min</span>${favs.includes(r.id)?'<span>❤️</span>':''}</div>
       </div>
-    </div>`).join('');
+    </div>`;}).join('');
 }
-renderTrending();
-renderFeatured();
+
+renderTrending();renderMostReviewed();renderFeatured();
 </script>
 </body>
 </html>
