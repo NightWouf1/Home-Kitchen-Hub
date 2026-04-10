@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seasonal Recipes – Kitchen Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fdf6ee;--bg2:#fff8f0;--text:#1a1208;--text2:#5a4a3a;--accent:#c8440a;--accent2:#e07b39;--card:#fff;--border:#e8d8c4;--shadow:rgba(180,100,40,.12);}
+.dark{--bg:#16100a;--bg2:#1e160e;--text:#f5ede0;--text2:#b09070;--accent:#e8673a;--accent2:#f09050;--card:#221a10;--border:#3a2a1a;--shadow:rgba(0,0,0,.4);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:64px;background:var(--bg);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--accent);text-decoration:none;}
+.nav-links{display:flex;gap:3px;align-items:center;}
+.nav-links a{text-decoration:none;color:var(--text2);font-size:.8rem;padding:5px 9px;border-radius:20px;transition:background .2s,color .2s;}
+.nav-links a:hover{background:var(--border);color:var(--text);}
+.nav-links a.active{background:var(--accent);color:#fff;}
+.nav-right{display:flex;gap:6px;align-items:center;}
+#darkBtn{background:var(--border);color:var(--text);border:none;border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.82rem;font-family:'DM Sans',sans-serif;}
+#darkBtn:hover{background:var(--accent);color:#fff;}
+#userChip{display:none;align-items:center;gap:7px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px 12px 3px 7px;font-size:.82rem;}
+#userChip .av{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;}
+#logoutBtn{background:none;border:none;color:var(--text2);cursor:pointer;font-size:.72rem;margin-left:3px;}
+.page{padding:88px 28px 60px;max-width:1100px;margin:0 auto;}
+.page-header{text-align:center;margin-bottom:32px;}
+.page-header h1{font-family:'Playfair Display',serif;font-size:2.2rem;margin-bottom:8px;}
+.page-header p{color:var(--text2);max-width:500px;margin:0 auto;}
+/* SEASON TABS */
+.season-tabs{display:flex;justify-content:center;gap:10px;margin-bottom:36px;flex-wrap:wrap;}
+.season-tab{padding:11px 22px;border-radius:20px;border:2px solid var(--border);background:var(--card);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;transition:all .2s;display:flex;align-items:center;gap:7px;}
+.season-tab:hover{border-color:var(--accent);}
+.season-tab.active-spring{background:#e8f5e8;border-color:#4aaa70;color:#1a7a40;}
+.season-tab.active-summer{background:#fff8d8;border-color:#d4aa40;color:#8a6800;}
+.season-tab.active-autumn{background:#fde8d8;border-color:#c8440a;color:#c8440a;}
+.season-tab.active-winter{background:#e8eeff;border-color:#5060c8;color:#3040a0;}
+.dark .season-tab.active-spring{background:#0a2818;color:#4aaa70;border-color:#4aaa70;}
+.dark .season-tab.active-summer{background:#2a2000;color:#d4aa40;border-color:#d4aa40;}
+.dark .season-tab.active-autumn{background:#3a1a08;color:#e8673a;border-color:#e8673a;}
+.dark .season-tab.active-winter{background:#0a0e28;color:#8090e8;border-color:#8090e8;}
+/* SEASON HERO */
+.season-hero{border-radius:18px;padding:32px;margin-bottom:32px;display:flex;align-items:center;gap:20px;}
+.season-hero.spring{background:linear-gradient(135deg,#e8f5e8,#d8ffe8);}
+.season-hero.summer{background:linear-gradient(135deg,#fff8d8,#fff0a8);}
+.season-hero.autumn{background:linear-gradient(135deg,#fde8d8,#ffd8b8);}
+.season-hero.winter{background:linear-gradient(135deg,#e8eeff,#d8e8ff);}
+.dark .season-hero.spring{background:linear-gradient(135deg,#0a2818,#0a2010);}
+.dark .season-hero.summer{background:linear-gradient(135deg,#2a2000,#2a1800);}
+.dark .season-hero.autumn{background:linear-gradient(135deg,#3a1a08,#2a1000);}
+.dark .season-hero.winter{background:linear-gradient(135deg,#0a0e28,#080a20);}
+.season-big-emoji{font-size:4.5rem;}
+.season-hero-text h2{font-family:'Playfair Display',serif;font-size:1.7rem;margin-bottom:6px;}
+.season-hero-text p{font-size:.88rem;line-height:1.7;color:var(--text2);}
+.season-stats{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;}
+.season-stat{background:rgba(255,255,255,.5);border-radius:9px;padding:6px 12px;font-size:.78rem;font-weight:500;}
+.dark .season-stat{background:rgba(0,0,0,.2);}
+/* FILTERS */
+.sub-filters{display:flex;gap:7px;margin-bottom:22px;flex-wrap:wrap;}
+.sub-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;font-size:.78rem;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.sub-btn:hover,.sub-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+/* RECIPE GRID */
+.recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;}
+.recipe-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:pointer;}
+.recipe-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px var(--shadow);}
+.card-emo{font-size:2.8rem;background:var(--bg2);display:block;text-align:center;padding:22px 0;}
+.card-body{padding:13px 16px 16px;}
+.card-tags{display:flex;gap:5px;margin-bottom:7px;flex-wrap:wrap;}
+.tag{font-size:.65rem;padding:2px 8px;border-radius:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+.tag-cuisine{background:#fde8d8;color:#c8440a;}
+.dark .tag-cuisine{background:#3a1a08;color:#e8673a;}
+.tag-easy{background:#d8f5e8;color:#1a7a40;}
+.dark .tag-easy{background:#0a2a18;color:#4aaa70;}
+.tag-medium{background:#fff3d8;color:#a07000;}
+.dark .tag-medium{background:#2a1e00;color:#d4aa40;}
+.tag-hard{background:#fde0e0;color:#a02020;}
+.dark .tag-hard{background:#2a0808;color:#e05050;}
+.card-title{font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:5px;}
+.card-meta{font-size:.75rem;color:var(--text2);display:flex;gap:9px;margin-bottom:7px;flex-wrap:wrap;}
+.card-badges{display:flex;gap:4px;flex-wrap:wrap;}
+.allergen-badge{font-size:.6rem;padding:2px 7px;border-radius:7px;font-weight:700;background:#fde0e0;color:#a02020;border:1px solid #e8b0b0;white-space:nowrap;}
+.dark .allergen-badge{background:#2a0808;color:#e06060;border-color:#5a2020;}
+.allergen-ok{font-size:.65rem;color:#1a7a40;font-weight:500;}
+.dark .allergen-ok{color:#4aaa70;}
+/* SEASONAL INGREDIENTS BANNER */
+.ing-banner{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:28px;}
+.ing-banner-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:10px;}
+.ing-pills{display:flex;gap:8px;flex-wrap:wrap;}
+.ing-pill{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:.82rem;cursor:default;}
+.empty{text-align:center;padding:50px 20px;color:var(--text2);}
+footer{text-align:center;padding:28px;border-top:1px solid var(--border);color:var(--text2);font-size:.82rem;margin-top:36px;}
+footer a{color:var(--accent);text-decoration:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">🍴 Kitchen Hub</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="kitchen.html">Recipes</a>
+    <a href="seasonal.html" class="active">Seasonal</a>
+    <a href="tips.html">Tips</a>
+    <a href="community.html">Community</a>
+    <a href="planner.html">Planner</a>
+    <a href="reviews.html">Reviews</a>
+  </div>
+  <div class="nav-right">
+    <button id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
+    <div id="userChip"><div class="av" id="avLetter">J</div><span id="chipName">User</span><button id="logoutBtn" onclick="logout()">✕</button></div>
+  </div>
+</nav>
 
+<div class="page">
+  <div class="page-header">
+    <h1>🍂 Seasonal Recipes</h1>
+    <p>Pick a season and discover the best recipes for that time of year — with allergen and spice info on every card.</p>
+  </div>
+
+  <div class="season-tabs">
+    <button class="season-tab" id="tab-spring" onclick="setSeason('spring')">🌸 Spring</button>
+    <button class="season-tab" id="tab-summer" onclick="setSeason('summer')">☀️ Summer</button>
+    <button class="season-tab" id="tab-autumn" onclick="setSeason('autumn')">🍂 Autumn</button>
+    <button class="season-tab" id="tab-winter" onclick="setSeason('winter')">❄️ Winter</button>
+  </div>
+
+  <div id="seasonHero"></div>
+  <div id="ingBanner"></div>
+
+  <div class="sub-filters" id="subFilters"></div>
+  <div class="recipe-grid" id="seasonGrid"></div>
+</div>
+
+<footer><p>Made with ❤️ · <a href="index.html">Home</a> · <a href="kitchen.html">Recipes</a> · <a href="tips.html">Tips</a></p></footer>
+
+<script src="recipes.js"></script>
+<script>
+function toggleDark(){const d=document.body.classList.toggle('dark');localStorage.setItem('dark',d);document.getElementById('darkBtn').textContent=d?'☀️ Light':'🌙 Dark';}
+if(localStorage.getItem('dark')==='true'){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️ Light';}
+function updateAuthUI(){const u=localStorage.getItem('username');const chip=document.getElementById('userChip');if(u){chip.style.display='flex';document.getElementById('avLetter').textContent=u[0].toUpperCase();document.getElementById('chipName').textContent=u;}else chip.style.display='none';}
+function logout(){updateAuthUI();}
+updateAuthUI();
+
+const SEASONS = {
+  spring:{ emoji:'🌸', label:'Spring', color:'spring',
+    desc:'Light, fresh dishes as the weather warms up. Great for bright pasta, scones, and anything with fresh herbs.',
+    ings:['🫛 Peas','🌿 Asparagus','🍓 Strawberries','🌱 Fresh herbs','🥬 Spinach','🫑 Spring onions'] },
+  summer:{ emoji:'☀️', label:'Summer', color:'summer',
+    desc:'BBQ season! Think burgers, ribs, spring rolls, and anything you can enjoy outside in the sunshine.',
+    ings:['🍅 Tomatoes','🌽 Sweetcorn','🫐 Blueberries','🌶️ Peppers','🥒 Courgette','🍑 Peaches'] },
+  autumn:{ emoji:'🍂', label:'Autumn', color:'autumn',
+    desc:'The leaves are falling and the oven is back on. Bolognese, lasagna, chili and hearty comfort food.',
+    ings:['🍄 Mushrooms','🎃 Butternut squash','🍎 Apples','🌰 Chestnuts','🥕 Carrots','🧅 Onions'] },
+  winter:{ emoji:'❄️', label:'Winter', color:'winter',
+    desc:'The best season for cooking — ramen, risotto, mac and cheese, and indulgent bakes by the fire.',
+    ings:['🥦 Cavolo nero','🍋 Citrus fruits','🥔 Root veg','🧄 Garlic','🌿 Rosemary','🧅 Leeks'] },
+};
+
+let currentSeason = 'autumn';
+let diffFilter = 'all';
+const mo = new Date().getMonth();
+if(mo>=2&&mo<=4) currentSeason='spring';
+else if(mo>=5&&mo<=7) currentSeason='summer';
+else if(mo>=8&&mo<=10) currentSeason='autumn';
+else currentSeason='winter';
+
+function diffTag(d){const m={Easy:'easy',Medium:'medium',Hard:'hard'};return`<span class="tag tag-${m[d]||'easy'}">${d}</span>`;}
+
+function setSeason(s) {
+  currentSeason = s; diffFilter = 'all';
+  document.querySelectorAll('.season-tab').forEach(t=>t.className='season-tab');
+  document.getElementById('tab-'+s).className = 'season-tab active-'+s;
+  const info = SEASONS[s];
+
+  // Hero
+  const allForSeason = ALL_RECIPES.filter(r=>r.season&&(r.season.includes(s)||r.season.includes('all')));
+  const cuisines = [...new Set(allForSeason.map(r=>r.cuisine))];
+  const avgTime = Math.round(allForSeason.reduce((a,r)=>a+r.time,0)/allForSeason.length);
+  document.getElementById('seasonHero').innerHTML=`
+    <div class="season-hero ${s}">
+      <div class="season-big-emoji">${info.emoji}</div>
+      <div class="season-hero-text">
+        <h2>${info.label} Recipes</h2>
+        <p>${info.desc}</p>
+        <div class="season-stats">
+          <span class="season-stat">🍳 ${allForSeason.length} recipes</span>
+          <span class="season-stat">🍽 ${cuisines.length} cuisines</span>
+          <span class="season-stat">⏱ Avg ${avgTime} min</span>
+        </div>
+      </div>
+    </div>`;
+
+  // Seasonal ingredients banner
+  document.getElementById('ingBanner').innerHTML=`
+    <div class="ing-banner">
+      <div class="ing-banner-title">${info.emoji} Great ${info.label} ingredients to cook with</div>
+      <div class="ing-pills">${info.ings.map(i=>`<span class="ing-pill">${i}</span>`).join('')}</div>
+    </div>`;
+
+  // Sub-filters
+  document.getElementById('subFilters').innerHTML=`
+    <button class="sub-btn active" onclick="setDiff(this,'all')">All Levels</button>
+    <button class="sub-btn" onclick="setDiff(this,'Easy')">Easy</button>
+    <button class="sub-btn" onclick="setDiff(this,'Medium')">Medium</button>
+    <button class="sub-btn" onclick="setDiff(this,'Hard')">Hard</button>`;
+
+  renderSeasonGrid();
+}
+
+function setDiff(btn, d) {
+  document.querySelectorAll('.sub-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); diffFilter = d; renderSeasonGrid();
+}
+
+function renderSeasonGrid() {
+  const s = currentSeason;
+  let recipes = ALL_RECIPES.filter(r=>r.season&&(r.season.includes(s)||r.season.includes('all')));
+  if(diffFilter !== 'all') recipes = recipes.filter(r=>r.diff===diffFilter);
+  if(!recipes.length){document.getElementById('seasonGrid').innerHTML='<div class="empty"><p>No recipes match this filter.</p></div>';return;}
+  document.getElementById('seasonGrid').innerHTML = recipes.map(r => {
+    const allergens = detectAllergens(r.ingredients);
+    const spice = SPICE_LABELS[r.spice||'none'];
+    return `<div class="recipe-card" onclick="window.location.href='kitchen.html?r=${r.id}'">
+      <span class="card-emo">${r.emoji}</span>
+      <div class="card-body">
+        <div class="card-tags"><span class="tag tag-cuisine">${r.cuisine}</span>${diffTag(r.diff)}</div>
+        <div class="card-title">${r.title}</div>
+        <div class="card-meta"><span>⏱ ${r.time}min</span><span>👤 ${r.servings}</span></div>
+        <div class="card-badges">
+          ${spiceBadgeHTML(r.spice||'none')}
+          ${allergens.length ? allergenBadgesHTML(allergens) : '<span class="allergen-ok">✅ No major allergens</span>'}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+setSeason(currentSeason);
+</script>
+</body>
+</html>
