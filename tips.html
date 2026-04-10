@@ -1,1 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tips & Tricks – Kitchen Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fdf6ee;--bg2:#fff8f0;--text:#1a1208;--text2:#5a4a3a;--accent:#c8440a;--accent2:#e07b39;--card:#fff;--border:#e8d8c4;--shadow:rgba(180,100,40,.12);}
+.dark{--bg:#16100a;--bg2:#1e160e;--text:#f5ede0;--text2:#b09070;--accent:#e8673a;--accent2:#f09050;--card:#221a10;--border:#3a2a1a;--shadow:rgba(0,0,0,.4);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:64px;background:var(--bg);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--accent);text-decoration:none;}
+.nav-links{display:flex;gap:3px;align-items:center;}
+.nav-links a{text-decoration:none;color:var(--text2);font-size:.8rem;padding:5px 9px;border-radius:20px;transition:background .2s,color .2s;}
+.nav-links a:hover{background:var(--border);color:var(--text);}
+.nav-links a.active{background:var(--accent);color:#fff;}
+.nav-right{display:flex;gap:6px;align-items:center;}
+#darkBtn{background:var(--border);color:var(--text);border:none;border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.82rem;font-family:'DM Sans',sans-serif;}
+#darkBtn:hover{background:var(--accent);color:#fff;}
+#userChip{display:none;align-items:center;gap:7px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px 12px 3px 7px;font-size:.82rem;}
+#userChip .av{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;}
+#logoutBtn{background:none;border:none;color:var(--text2);cursor:pointer;font-size:.72rem;margin-left:3px;}
+.page{padding:88px 28px 60px;max-width:900px;margin:0 auto;}
+.page-header{margin-bottom:28px;}
+.page-header h1{font-family:'Playfair Display',serif;font-size:2.2rem;margin-bottom:6px;}
+.page-header p{color:var(--text2);}
 
+/* TIP OF THE DAY */
+.tip-of-day{background:var(--accent);border-radius:18px;padding:24px 28px;margin-bottom:28px;color:#fff;display:flex;gap:18px;align-items:flex-start;}
+.tod-emoji{font-size:2.8rem;flex-shrink:0;}
+.tod-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.75;margin-bottom:5px;}
+.tod-title{font-family:'Playfair Display',serif;font-size:1.25rem;margin-bottom:7px;}
+.tod-text{font-size:.87rem;line-height:1.65;opacity:.9;}
+
+/* TOOLBAR */
+.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:22px;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:180px;}
+.search-wrap input{width:100%;padding:9px 14px 9px 36px;border:1px solid var(--border);border-radius:11px;background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;}
+.search-wrap input:focus{outline:none;border-color:var(--accent);}
+.s-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text2);pointer-events:none;}
+.filter-group{display:flex;gap:6px;flex-wrap:wrap;}
+.filter-btn{padding:7px 13px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;font-size:.78rem;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.filter-btn:hover,.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* TIPS GRID */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:16px;}
+@media(max-width:580px){.tips-grid{grid-template-columns:1fr;}}
+.tip-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;transition:transform .2s,box-shadow .2s;}
+.tip-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--shadow);}
+.tip-card-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:9px;}
+.tip-emoji{font-size:1.9rem;flex-shrink:0;}
+.tip-title{font-family:'Playfair Display',serif;font-size:1.02rem;line-height:1.3;}
+.tip-badges{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;}
+.tip-cat{font-size:.62rem;padding:2px 8px;border-radius:7px;background:var(--bg2);color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+.tip-level-beginner{font-size:.62rem;padding:2px 8px;border-radius:7px;background:#d8f5e8;color:#1a7a40;font-weight:700;text-transform:uppercase;}
+.dark .tip-level-beginner{background:#0a2818;color:#4aaa70;}
+.tip-level-intermediate{font-size:.62rem;padding:2px 8px;border-radius:7px;background:#fff3d8;color:#a07000;font-weight:700;text-transform:uppercase;}
+.dark .tip-level-intermediate{background:#2a1e00;color:#d4aa40;}
+.tip-text{font-size:.85rem;line-height:1.7;color:var(--text2);}
+.tip-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+.helpful-btn{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-size:.78rem;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.helpful-btn:hover{border-color:#4aaa70;color:#4aaa70;}
+.helpful-btn.voted{background:#d8f5e8;border-color:#4aaa70;color:#1a7a40;}
+.dark .helpful-btn.voted{background:#0a2818;color:#4aaa70;}
+.helpful-count{font-size:.75rem;color:var(--text2);}
+.empty{text-align:center;padding:50px 20px;color:var(--text2);}
+footer{text-align:center;padding:28px;border-top:1px solid var(--border);color:var(--text2);font-size:.82rem;margin-top:36px;}
+footer a{color:var(--accent);text-decoration:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">🍴 Kitchen Hub</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="kitchen.html">Recipes</a>
+    <a href="seasonal.html">Seasonal</a>
+    <a href="tips.html" class="active">Tips</a>
+    <a href="community.html">Community</a>
+    <a href="planner.html">Planner</a>
+    <a href="reviews.html">Reviews</a>
+  </div>
+  <div class="nav-right">
+    <button id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
+    <div id="userChip"><div class="av" id="avLetter">J</div><span id="chipName">User</span><button id="logoutBtn" onclick="logout()">✕</button></div>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <h1>💡 Tips & Tricks</h1>
+    <p>Short, practical cooking tips that will genuinely make you a better home cook.</p>
+  </div>
+
+  <!-- TIP OF THE DAY -->
+  <div class="tip-of-day" id="tipOfDay"></div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="s-icon">🔍</span>
+      <input id="tipSearch" placeholder="Search tips..." oninput="renderTips()">
+    </div>
+    <div class="filter-group">
+      <button class="filter-btn active" onclick="setFilter(this,'all','cat')">All Tips</button>
+      <button class="filter-btn" onclick="setFilter(this,'Technique','cat')">🔪 Technique</button>
+      <button class="filter-btn" onclick="setFilter(this,'Italian','cat')">🍝 Italian</button>
+      <button class="filter-btn" onclick="setFilter(this,'Asian','cat')">🍜 Asian</button>
+      <button class="filter-btn" onclick="setFilter(this,'Baking','cat')">🧁 Baking</button>
+    </div>
+    <div class="filter-group">
+      <button class="filter-btn active" onclick="setFilter(this,'all','lvl')">All Levels</button>
+      <button class="filter-btn" onclick="setFilter(this,'Beginner','lvl')">🟢 Beginner</button>
+      <button class="filter-btn" onclick="setFilter(this,'Intermediate','lvl')">🟡 Intermediate</button>
+    </div>
+  </div>
+
+  <div class="tips-grid" id="tipsGrid"></div>
+</div>
+
+<footer><p>Made with ❤️ · <a href="index.html">Home</a> · <a href="kitchen.html">Recipes</a> · <a href="seasonal.html">Seasonal</a></p></footer>
+
+<script src="recipes.js"></script>
+<script>
+function toggleDark(){const d=document.body.classList.toggle('dark');localStorage.setItem('dark',d);document.getElementById('darkBtn').textContent=d?'☀️ Light':'🌙 Dark';}
+if(localStorage.getItem('dark')==='true'){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️ Light';}
+function updateAuthUI(){const u=localStorage.getItem('username');const chip=document.getElementById('userChip');if(u){chip.style.display='flex';document.getElementById('avLetter').textContent=u[0].toUpperCase();document.getElementById('chipName').textContent=u;}else chip.style.display='none';}
+function logout(){updateAuthUI();}
+updateAuthUI();
+
+let filters = { cat:'all', lvl:'all' };
+
+function setFilter(btn, val, type) {
+  document.querySelectorAll(`.filter-btn[onclick*="'${type}'"]`).forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filters[type] = val;
+  renderTips();
+}
+
+// TIP OF THE DAY — rotates daily based on the date
+function renderTipOfDay() {
+  const dayIndex = Math.floor(Date.now() / 86400000) % ALL_TIPS.length;
+  const tip = ALL_TIPS[dayIndex];
+  document.getElementById('tipOfDay').innerHTML = `
+    <div class="tod-emoji">${tip.emoji}</div>
+    <div>
+      <div class="tod-label">💡 Tip of the Day</div>
+      <div class="tod-title">${tip.title}</div>
+      <div class="tod-text">${tip.tip}</div>
+    </div>`;
+}
+
+// HELPFUL VOTES
+function getVotes() { return JSON.parse(localStorage.getItem('tipVotes') || '{}'); }
+function getMyVotes() { return JSON.parse(localStorage.getItem('myTipVotes') || '[]'); }
+
+function voteHelpful(id) {
+  const myVotes = getMyVotes();
+  const votes = getVotes();
+  if (myVotes.includes(id)) {
+    // unvote
+    const idx = myVotes.indexOf(id);
+    myVotes.splice(idx, 1);
+    votes[id] = Math.max(0, (votes[id] || 0) - 1);
+  } else {
+    myVotes.push(id);
+    votes[id] = (votes[id] || 0) + 1;
+  }
+  localStorage.setItem('tipVotes', JSON.stringify(votes));
+  localStorage.setItem('myTipVotes', JSON.stringify(myVotes));
+  renderTips();
+}
+
+function renderTips() {
+  const q = document.getElementById('tipSearch').value.toLowerCase();
+  const votes = getVotes();
+  const myVotes = getMyVotes();
+
+  let tips = ALL_TIPS.filter(t => {
+    if (filters.cat !== 'all' && t.category !== filters.cat) return false;
+    if (filters.lvl !== 'all' && t.level !== filters.lvl) return false;
+    if (q && !t.title.toLowerCase().includes(q) && !t.tip.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  if (!tips.length) {
+    document.getElementById('tipsGrid').innerHTML = '<div class="empty"><p>No tips match your search.</p></div>';
+    return;
+  }
+
+  const levelClass = l => l === 'Beginner' ? 'tip-level-beginner' : 'tip-level-intermediate';
+
+  document.getElementById('tipsGrid').innerHTML = tips.map(t => {
+    const voteCount = votes[t.id] || 0;
+    const voted = myVotes.includes(t.id);
+    return `<div class="tip-card">
+      <div class="tip-card-header">
+        <div class="tip-emoji">${t.emoji}</div>
+        <div>
+          <div class="tip-title">${t.title}</div>
+          <div class="tip-badges">
+            <span class="tip-cat">${t.category}</span>
+            <span class="${levelClass(t.level)}">${t.level}</span>
+          </div>
+        </div>
+      </div>
+      <div class="tip-text">${t.tip}</div>
+      <div class="tip-footer">
+        <button class="helpful-btn ${voted?'voted':''}" onclick="voteHelpful(${t.id})">
+          ${voted?'✅':'👍'} Helpful
+        </button>
+        <span class="helpful-count">${voteCount} ${voteCount===1?'person found':'people found'} this helpful</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+renderTipOfDay();
+renderTips();
+</script>
+</body>
+</html>
